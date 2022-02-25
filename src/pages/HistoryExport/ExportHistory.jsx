@@ -2,12 +2,10 @@ import DataTable from "react-data-table-component";
 import Header from "components/header/Header";
 // import Checkbox from "../../components/checkbox/Checkbox";
 import Checkbox from "@material-ui/core/Checkbox";
-import SearchIcon from '@mui/icons-material/Search';
+// import Seach;
 import exports from "./dataExport";
 import { useEffect, useState } from "react";
 import "./ExportHistory.css";
-import { Form } from "react-bootstrap";
-import { InputGroup } from "react-bootstrap";
 
 export default function ExportHistory() {
     const columns = [
@@ -84,83 +82,108 @@ export default function ExportHistory() {
         <>
             <Header />
             <div className="swrap">
-                <h1>Export History List</h1>
-                <form className="d-flex ">
-                    <div className="form-outline mb-4 ms-2 me-1 d-flex ">
-                        <label
-                            className="form-label d-flex flex-column justify-content-center"
-                            htmlFor="formqcode"
+                <h1 className="header__list">Export History List</h1>
+                <div className="d-flex justify-content-between">
+                    <form className="d-flex ">
+                        <div className="form-outline mb-4 ms-2 me-1 d-flex ">
+                            <label
+                                className="form-label d-flex flex-column justify-content-center"
+                                htmlFor="formqcode"
+                            >
+                                Qcode:
+                            </label>
+                            <input
+                                type="text"
+                                id="formqcode"
+                                className="form-control"
+                                placeholder="Enter Qcode"
+                            />
+                        </div>
+                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
+                            <label
+                                className="form-label d-flex flex-column justify-content-center"
+                                htmlFor="formzone"
+                            >
+                                Zone:
+                            </label>
+                            <input
+                                type="text"
+                                id="formZone"
+                                className="form-control"
+                                placeholder="Enter Zone"
+                            />
+                        </div>
+                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
+                            <label
+                                className="form-label d-flex flex-column justify-content-center"
+                                htmlFor="formlocation"
+                            >
+                                Location:
+                            </label>
+                            <input
+                                type="text"
+                                id="formlocation"
+                                className="form-control"
+                                placeholder="Enter location"
+                            />
+                        </div>
+                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
+                            <label
+                                className="form-label d-flex flex-column justify-content-center"
+                                htmlFor="formitem"
+                            >
+                                Item:
+                            </label>
+                            <input
+                                type="text"
+                                id="formitem"
+                                className="form-control"
+                                placeholder="Enter item"
+                            />
+                        </div>
+                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
+                            <label
+                                className="form-label d-flex flex-column justify-content-center"
+                                htmlFor="formspec"
+                            >
+                                Specification:
+                            </label>
+                            <input
+                                type="text"
+                                id="formspec"
+                                className="form-control"
+                                placeholder="Enter spec"
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            className="btn btn-primary button__export"
                         >
-                            Qcode:
-                        </label>
-                        <input
-                            type="text"
-                            id="formqcode"
-                            className="form-control"
-                            placeholder="Enter Qcode"
-                        />
-                    </div>
-                    <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                        <label
-                            className="form-label d-flex flex-column justify-content-center"
-                            htmlFor="formzone"
+                            Search
+                        </button>
+                    </form>
+                    <div className="me-2">
+                        <button
+                            type="button"
+                            className="btn btn-primary button__export"
                         >
-                            Zone:
-                        </label>
-                        <input
-                            type="text"
-                            id="formZone"
-                            className="form-control"
-                            placeholder="Enter Zone"
-                        />
-                    </div>
-                    <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                        <label
-                            className="form-label d-flex flex-column justify-content-center"
-                            htmlFor="formlocation"
+                            Excel Report
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-primary button__export"
                         >
-                            Location:
-                        </label>
-                        <input
-                            type="text"
-                            id="formlocation"
-                            className="form-control"
-                            placeholder="Enter location"
-                        />
-                    </div>
-                    <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                        <label
-                            className="form-label d-flex flex-column justify-content-center"
-                            htmlFor="formitem"
+                            Edit
+                        </button>
+                        <button
+                            type="button"
+                            className="btn btn-danger button__export"
                         >
-                            Item:
-                        </label>
-                        <input
-                            type="text"
-                            id="formitem"
-                            className="form-control"
-                            placeholder="Enter item"
-                        />
+                            Delete
+                        </button>
                     </div>
-                    <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                        <label
-                            className="form-label d-flex flex-column justify-content-center"
-                            htmlFor="formspec"
-                        >
-                            Specification:
-                        </label>
-                        <input
-                            type="text"
-                            id="formspec"
-                            className="form-control"
-                            placeholder="Enter spec"
-                        />
-                    </div>
-                    <button type="button" className="btn btn-primary">
-                       <SearchIcon/> Search
-                    </button>
-                </form>
-             
+                </div>
+
                 <DataTable
                     columns={columns}
                     data={exports}
@@ -171,7 +194,6 @@ export default function ExportHistory() {
                     conditionalRowStyles={conditionalRowStyles}
                     pagination
                 />
-                ;
             </div>
         </>
     );

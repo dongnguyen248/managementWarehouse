@@ -4,6 +4,7 @@ import DataTable from "react-data-table-component";
 import Header from "components/header/Header";
 
 
+
 import Checkbox from "@material-ui/core/Checkbox";
 // import Checkbox from "../../components/checkbox/Checkbox";
 
@@ -54,13 +55,14 @@ export default function ImportHistory() {
             selector: (row) => row.requester,
         },
         {
-            name: "Remark",
-            selector: (row) => row.remark,
-        },
-        {
             name: "Locator",
             selector: (row) => row.locator,
         },
+        {
+            name: "Remark",
+            selector: (row) => row.remark,
+        },
+      
     ];
 
     const data = [
@@ -79,8 +81,8 @@ export default function ImportHistory() {
             supplier:"HƯNG THỊNH",
             buyer:"Nguyễn Thị Thu",
             requester:"PACKING 1",
-            remark: "",
             locator: "QMA01.WH1-BOLT",
+            remark: "",
         },
         {
             id: 2,
@@ -93,7 +95,7 @@ export default function ImportHistory() {
           <>
               <Header />
               <div className="swrap">
-                  <h1>Import History List</h1>
+                  <h1 className="header__list">Import History List</h1>
                   <DataTable
                       columns={columns}
                       data={data}

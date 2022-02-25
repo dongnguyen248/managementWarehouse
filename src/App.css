@@ -13,10 +13,17 @@ a:hover{
 .swrap{
     margin-top: 80px;
 }
+*{
+    font-family: 'Open Sans', sans-serif;
+
+}
 
 /* rewrite css react-datatable-component */
 .rdt_TableHeadRow{
     background-color: RGB(152,177,199) !important;
+    font-weight: bold;
+    font-size: 1rem;
+    font-family: 'Open Sans', sans-serif;
 }
 .rdt_TableCell{
     border-left:solid 0.1px #cccc !important;
@@ -26,3 +33,10 @@ a:hover{
     border-left:solid 0.1px #fff !important;
     border-right:solid 0.1px #fff !important;
 }
+.header__list{
+    text-align: center;
+    background: #37a437;
+    color: #fff;
+    height: 60px;
+    line-height: 60px;
+  }
