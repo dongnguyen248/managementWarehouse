@@ -1,25 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+
+import Home from "./pages/Home/Home";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Login from "./pages/Login/Login";
+import Inventory from "./pages/Inventory/Inverntory";
+import ExportHistory from "./pages/HistoryExport/ExportHistory";
+import ImportHistory from "./pages/HistoryImport/ImportHistory";
+import "./App.css"
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    useRoutes 
+} from "react-router-dom";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/inventory" element={<Inventory />} />
+                <Route path="/history-export" element={<ExportHistory />} />
+                <Route path="/history-import" element={<ImportHistory />} />
+                <Route path="/login" element={<Login />} />
+            </Routes>
+        </div>
+    );
 }
-
 export default App;
