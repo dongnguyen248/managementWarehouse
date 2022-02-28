@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import DatePicker from 'react-datepicker';
 import './InventoryModals.css';
 function AddQuantity() {
     const handleAddQuantity = () => {
@@ -8,6 +9,17 @@ function AddQuantity() {
         qCode: '',
         inputDate: new Date(),
         quantity: '',
+        price: '',
+        poNumber: '',
+        supplier: '',
+        buyer: '',
+        requester: '',
+        received: false,
+        locator: '',
+        checked: false,
+        datecheck: '',
+        checker: '',
+        checkResult: '',
     });
     return (
         <>
@@ -39,7 +51,7 @@ function AddQuantity() {
                                 className='form-control'
                                 selected={quantity.inputDate}
                                 onChange={(date: Date) =>
-                                    setMaterial({
+                                    setQuantity({
                                         ...quantity,
                                         checkedDate: date,
                                     })
@@ -66,14 +78,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Price</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        price: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -83,14 +95,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>PO Number</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        poNumber: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -100,14 +112,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Supplier</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        supplier: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -117,14 +129,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Buyer</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        buyer: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -134,14 +146,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Requester</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        requester: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -151,14 +163,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Received</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        received: e.target.checked,
                                     })
                                 }
                                 type='text'
@@ -168,14 +180,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Locator</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        locator: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -185,14 +197,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Checked</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        checked: e.target.checked,
                                     })
                                 }
                                 type='text'
@@ -202,14 +214,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Date Check</label>
                         </td>
                         <td>
-                            <input
+                            <DatePicker
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        datecheck: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -219,14 +231,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Checker</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        checker: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -236,14 +248,14 @@ function AddQuantity() {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>QCode</label>
+                            <label>Check Result</label>
                         </td>
                         <td>
                             <input
                                 onChange={(e) =>
                                     setQuantity({
                                         ...quantity,
-                                        qCode: e.target.value,
+                                        checkResult: e.target.value,
                                     })
                                 }
                                 type='text'

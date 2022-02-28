@@ -7,11 +7,14 @@ import NewMaterial from 'components/modals/NewMaterial';
 import AddQuantity from 'components/modals/AddQuantity';
 import InventorySearch from 'components/searchingForm/InventorySearch';
 import './Inventory.css';
-import inventory from './datainventory';
+import inventories from './datainventory';
+
 export default function Inverntory() {
     const [newMaterial, setNewMaterial] = useState(false);
     const [addQuantity, setAddQuantity] = useState(false);
     const [exportMaterial, setExportMaterial] = useState(false);
+    const [dataInventories, setDataInventories] = useState(inventories);
+
     const columns = [
         {
             name: 'Zone',
@@ -50,6 +53,31 @@ export default function Inverntory() {
             selector: (row) => row.locator,
         },
     ];
+    const selectedRowStyle = [
+        {
+            when: (row) => row.toggleSelected,
+            style: {
+                backgroundColor: '#dff0d8',
+                userSelect: 'none',
+            },
+        },
+    ];
+
+    const handleRowClicked = (row) => {
+        console.log(Checkbox);
+        const updatedData = dataInventories.map((item) => {
+            if (row.id !== item.id) {
+                return item;
+            }
+
+            return {
+                ...item,
+                toggleSelected: !item.toggleSelected,
+            };
+        });
+
+        setDataInventories(updatedData);
+    };
 
     return (
         <>
@@ -79,10 +107,12 @@ export default function Inverntory() {
                 <InventorySearch />
                 <DataTable
                     columns={columns}
-                    data={inventory}
+                    data={dataInventories}
                     selectableRowsSingle
                     selectableRows
                     selectableRowsComponent={Checkbox}
+                    onRowClicked={handleRowClicked}
+                    conditionalRowStyles={selectedRowStyle}
                     pagination
                 />
             </div>
