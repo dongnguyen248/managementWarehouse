@@ -1,33 +1,12 @@
 import { useState } from 'react';
 import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
-import React from 'react';
 
-const ImportMaterial = () => {
-    const [material, setMaterial] = useState({
-        startDate: new Date(),
-        checkedDate: new Date(),
-        qCode: '',
-        area: [],
-        location: '',
-        item: '',
-        spec: '',
-        unit: '',
-        quantity: 0,
-        price: 0,
-        buyer: '',
-        poNumber: '',
-        receiver: [],
-        remark: '',
-        supplier: '',
-        checked: false,
-        checkResult: [],
-        received: false,
-    });
+const EditMaterial = ({ data }) => {
+    const [material, setMaterial] = useState(data);
     const handleSaveMaterial = () => {
         console.log(material);
     };
-
     return (
         <>
             <table className='table table-bordered'>
@@ -38,6 +17,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.qcode}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -65,6 +45,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.location}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -80,6 +61,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.item}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -97,6 +79,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <textarea
+                                defaultValue={data.spec}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -110,6 +93,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.unit}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -128,6 +112,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.quantity}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -144,6 +129,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.price}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -162,6 +148,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <DatePicker
+                                dateFormat='yyyy-MM-dd'
                                 selected={material.startDate}
                                 onChange={(date: Date) =>
                                     setMaterial({
@@ -177,6 +164,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.poNumber}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -194,6 +182,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.supplier}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -209,6 +198,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.buyer}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -248,6 +238,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <textarea
+                                defaultValue={data.remark}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -281,6 +272,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <DatePicker
+                                dateFormat='yyyy-MM-dd'
                                 className='form-control'
                                 selected={material.checkedDate}
                                 onChange={(date: Date) =>
@@ -298,6 +290,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.checker}
                                 onChange={(e) => {
                                     setMaterial({
                                         ...material,
@@ -339,6 +332,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.locator}
                                 onChange={(e) => {
                                     setMaterial({
                                         ...material,
@@ -378,4 +372,4 @@ const ImportMaterial = () => {
     );
 };
 
-export default ImportMaterial;
+export default EditMaterial;

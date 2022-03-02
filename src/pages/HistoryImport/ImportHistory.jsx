@@ -1,109 +1,112 @@
-import React from "react";
-import DataTable from "react-data-table-component";
-// import Header from "../../components/Header/Header";
-import Header from "components/header/Header";
-
-
-
-import Checkbox from "@material-ui/core/Checkbox";
-// import Checkbox from "../../components/checkbox/Checkbox";
+import { useCallback } from 'react';
+import DataTable from 'react-data-table-component';
+import Header from 'components/header/Header';
+import ImportHistorySearch from 'components/searchingForm/ImportHistorySearch';
+import dataImport from './dataImport';
 
 export default function ImportHistory() {
+    const handleDelete = useCallback(
+        (row) => async () => {
+            console.log(row);
+        },
+        [],
+    );
+    const handleEdit = useCallback(
+        (row) => async () => {
+            console.log(row);
+        },
+        [],
+    );
     const columns = [
         {
-            name: "Qcode",
-            selector: (row) => row.zone,
+            name: 'Qcode',
+            selector: (row) => row.qcode,
+            grow: 0.3,
         },
         {
-            name: "Item",
+            name: 'Item',
             selector: (row) => row.item,
         },
         {
-            name: "Location",
+            name: 'Location',
             selector: (row) => row.location,
+            grow: 0.3,
         },
         {
-            name: "Specification",
+            name: 'Specification',
             selector: (row) => row.spec,
+            grow: 2,
+            wrap: true,
         },
         {
-            name: "Import Date",
-            selector: (row) => row.unit,
+            name: 'Import Date',
+            selector: (row) => row.importdate,
+            grow: 0.3,
+            wrap: true,
         },
         {
-            name: "Quantity",
+            name: 'Quantity',
             selector: (row) => row.quantity,
+            grow: 0.3,
         },
         {
-            name: "Price",
+            name: 'Price',
             selector: (row) => row.price,
+            grow: 0.3,
         },
         {
-            name: "PO Number",
+            name: 'PO Number',
             selector: (row) => row.ponumber,
+            grow: 0.3,
         },
         {
-            name: "Supplier",
+            name: 'Supplier',
             selector: (row) => row.supplier,
         },
         {
-            name: "Buyer",
+            name: 'Buyer',
             selector: (row) => row.buyer,
         },
         {
-            name: "Requester",
+            name: 'Requester',
             selector: (row) => row.requester,
         },
         {
-            name: "Locator",
+            name: 'Locator',
             selector: (row) => row.locator,
         },
         {
-            name: "Remark",
+            name: 'Remark',
             selector: (row) => row.remark,
         },
-      
+        {
+            cell: (row) => (
+                <div>
+                    <button
+                        className='btn me-2 btn-primary btn-sm'
+                        onClick={handleEdit(row)}>
+                        Edit
+                    </button>
+
+                    <button
+                        className='btn btn-danger  btn-sm'
+                        onClick={handleDelete(row)}>
+                        Delete
+                    </button>
+                </div>
+            ),
+            grow: 1,
+        },
     ];
 
-    const data = [
-        {
-            id: 1,
-            title: "Year",
-            zone: "MAIN WAREHOUSE",
-            location: "KÊ BOLT",
-            qcode: "Q4356383",
-            item: "Bolt M45xP4.5x235Lx145Sx60S,RH,12.9,HRC",
-            spec: "Bolt M45xP4.5x235Lx145Sx60S,RH,12.9,HRC 30~35, DWG NO: VST12ZRMC010,FOR COIL CAR #1ZRM",
-            unit: "set",
-            quantity: 10,
-            price: 34.51,
-            ponumber:37682-9,
-            supplier:"HƯNG THỊNH",
-            buyer:"Nguyễn Thị Thu",
-            requester:"PACKING 1",
-            locator: "QMA01.WH1-BOLT",
-            remark: "",
-        },
-        {
-            id: 2,
-            title: "Year",
-            year: "1984",
-        },
-    ];
     return (
-
-          <>
-              <Header />
-              <div className="swrap">
-                  <h1 className="header__list">Import History List</h1>
-                  <DataTable
-                      columns={columns}
-                      data={data}
-                      selectableRows
-                      selectableRowsComponent={Checkbox}
-                  />
-                  ;
-              </div>
-          </>
-    )
-  }
+        <>
+            <Header />
+            <div className='swrap'>
+                <h1 className='header__list'>Import History List</h1>
+                <ImportHistorySearch />
+                <DataTable columns={columns} data={dataImport} pagination />;
+            </div>
+        </>
+    );
+}

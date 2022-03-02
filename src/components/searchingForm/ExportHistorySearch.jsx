@@ -1,10 +1,7 @@
-export default function InventorySearch() {
-    const hanleSearchItem = () => {
-        console.log('search item');
-    };
+function ExportHistorySearch() {
     return (
-        <>
-            <form className='d-flex mb-2'>
+        <div className='d-flex mb-2 justify-content-between'>
+            <form className='d-flex '>
                 <div className='form-outline ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
@@ -72,11 +69,12 @@ export default function InventorySearch() {
                 </div>
                 <button
                     type='button'
-                    className='btn btn-primary button__export'
-                    onClick={hanleSearchItem}>
+                    className='btn btn-primary button__export'>
                     Search
                 </button>
             </form>
-        </>
+        </div>
     );
 }
+
+export default ExportHistorySearch;

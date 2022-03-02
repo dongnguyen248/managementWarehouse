@@ -46,7 +46,7 @@
         ]
     },
     "lint-staged": {
-        "src/*.{js,json,scss,jsx,css}": "prettier --single-quote --jsx-single-quote  --jsx-bracket-same-line  --bracket-same-line --trailing-comma all --tab-width 4 --write"
+        "src/**/*.{js,json,scss,jsx,css}": "prettier --single-quote --jsx-single-quote  --jsx-bracket-same-line  --bracket-same-line --trailing-comma all --tab-width 4 --write"
     },
     "husky": {
         "hooks": {

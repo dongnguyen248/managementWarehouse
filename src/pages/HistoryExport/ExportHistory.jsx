@@ -1,58 +1,95 @@
-import DataTable from "react-data-table-component";
-import Header from "components/header/Header";
-// import Checkbox from "../../components/checkbox/Checkbox";
-import Checkbox from "@material-ui/core/Checkbox";
-// import Seach;
-import exports from "./dataExport";
-import { useEffect, useState } from "react";
-import "./ExportHistory.css";
+import DataTable from 'react-data-table-component';
+import Header from 'components/header/Header';
+import exports from './dataExport';
+import { useCallback, useEffect, useState } from 'react';
+import './ExportHistory.css';
+import ExportHistorySearch from 'components/searchingForm/ExportHistorySearch';
 
 export default function ExportHistory() {
     const columns = [
         {
-            name: "Zone",
+            name: 'Zone',
             selector: (row) => row.zone,
+            wrap: true,
         },
         {
-            name: "Qcode",
+            name: 'Qcode',
             selector: (row) => row.qcode,
-            sortable: true,
+            grow: 0.5,
+            wrap: true,
         },
         {
-            name: "Item",
+            name: 'Item',
             selector: (row) => row.item,
+            wrap: true,
         },
         {
-            name: "Location",
+            name: 'Location',
             selector: (row) => row.location,
         },
         {
-            name: "Specification",
+            name: 'Specification',
             selector: (row) => row.spec,
+            wrap: true,
+            grow: 2,
         },
         {
-            name: "Unit",
+            name: 'Unit',
             selector: (row) => row.unit,
+            grow: 0.3,
         },
         {
-            name: "Quantity",
+            name: 'Quantity',
             selector: (row) => row.quantity,
+            grow: 0.3,
         },
         {
-            name: "Remark",
+            name: 'Remark',
             selector: (row) => row.remark,
         },
         {
-            name: "Locator",
+            name: 'Locator',
             selector: (row) => row.locator,
+            wrap: true,
+        },
+        {
+            cell: (row) => (
+                <div>
+                    <button
+                        className='btn me-2  btn-primary btn-sm'
+                        onClick={handleEdit(row)}>
+                        Edit
+                    </button>
+
+                    <button
+                        className='btn btn-danger btn-sm'
+                        onClick={handleDelete(row)}>
+                        Delete
+                    </button>
+                </div>
+            ),
+            grow: 1,
         },
     ];
 
     const [historyep, setHistoryep] = useState(exports);
+    const handleDelete = useCallback(
+        (row) => async () => {
+            console.log(row);
+        },
+        [],
+    );
+    const handleEdit = useCallback(
+        (row) => async () => {
+            console.log(row);
+        },
+        [],
+    );
 
     const handleRowClicked = (row) => {
         const updatedData = historyep.map((item) => {
             if (row.id !== item.id) {
+                delete item.toggleSelected;
                 return item;
             }
             return {
@@ -65,15 +102,10 @@ export default function ExportHistory() {
 
     const conditionalRowStyles = [
         {
-            when: (row) => {
-                if (row.id == 1) {
-                    console.log(row);
-                }
-                return row.toggleSelected;
-            },
+            when: (row) => row.toggleSelected,
             style: {
-                backgroundColor: "green",
-                userSelect: "none",
+                backgroundColor: '#dff0d8',
+                userSelect: 'none',
             },
         },
     ];
@@ -81,115 +113,13 @@ export default function ExportHistory() {
     return (
         <>
             <Header />
-            <div className="swrap">
-                <h1 className="header__list">Export History List</h1>
-                <div className="d-flex justify-content-between">
-                    <form className="d-flex ">
-                        <div className="form-outline mb-4 ms-2 me-1 d-flex ">
-                            <label
-                                className="form-label d-flex flex-column justify-content-center"
-                                htmlFor="formqcode"
-                            >
-                                Qcode:
-                            </label>
-                            <input
-                                type="text"
-                                id="formqcode"
-                                className="form-control"
-                                placeholder="Enter Qcode"
-                            />
-                        </div>
-                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                            <label
-                                className="form-label d-flex flex-column justify-content-center"
-                                htmlFor="formzone"
-                            >
-                                Zone:
-                            </label>
-                            <input
-                                type="text"
-                                id="formZone"
-                                className="form-control"
-                                placeholder="Enter Zone"
-                            />
-                        </div>
-                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                            <label
-                                className="form-label d-flex flex-column justify-content-center"
-                                htmlFor="formlocation"
-                            >
-                                Location:
-                            </label>
-                            <input
-                                type="text"
-                                id="formlocation"
-                                className="form-control"
-                                placeholder="Enter location"
-                            />
-                        </div>
-                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                            <label
-                                className="form-label d-flex flex-column justify-content-center"
-                                htmlFor="formitem"
-                            >
-                                Item:
-                            </label>
-                            <input
-                                type="text"
-                                id="formitem"
-                                className="form-control"
-                                placeholder="Enter item"
-                            />
-                        </div>
-                        <div className="form-outline mb-4 ms-2 me-1 d-flex justify-content-center">
-                            <label
-                                className="form-label d-flex flex-column justify-content-center"
-                                htmlFor="formspec"
-                            >
-                                Specification:
-                            </label>
-                            <input
-                                type="text"
-                                id="formspec"
-                                className="form-control"
-                                placeholder="Enter spec"
-                            />
-                        </div>
-                        <button
-                            type="button"
-                            className="btn btn-primary button__export"
-                        >
-                            Search
-                        </button>
-                    </form>
-                    <div className="me-2">
-                        <button
-                            type="button"
-                            className="btn btn-primary button__export"
-                        >
-                            Excel Report
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-primary button__export"
-                        >
-                            Edit
-                        </button>
-                        <button
-                            type="button"
-                            className="btn btn-danger button__export"
-                        >
-                            Delete
-                        </button>
-                    </div>
-                </div>
+            <div className='swrap'>
+                <h1 className='header__list'>Export History List</h1>
+                <ExportHistorySearch />
 
                 <DataTable
                     columns={columns}
-                    data={exports}
-                    selectableRows
-                    selectableRowsSingle
-                    selectableRowsComponent={Checkbox}
+                    data={historyep}
                     onRowClicked={handleRowClicked}
                     conditionalRowStyles={conditionalRowStyles}
                     pagination
