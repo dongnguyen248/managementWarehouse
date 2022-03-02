@@ -18,6 +18,7 @@
         "react-router-dom": "^6.2.1",
         "react-scripts": "5.0.0",
         "styled-components": "^5.3.3",
+        "sweetalert": "^2.1.2",
         "web-vitals": "^2.1.4"
     },
     "scripts": {
@@ -43,9 +44,9 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
-    }, 
+    },
     "lint-staged": {
-        "src/**/*.{js,json,scss,jsx,css}": "prettier --single-quote --jsx-single-quote  --jsx-bracket-same-line  --bracket-same-line --trailing-comma all --tab-width 4 --write"
+        "src/*.{js,json,scss,jsx,css}": "prettier --single-quote --jsx-single-quote  --jsx-bracket-same-line  --bracket-same-line --trailing-comma all --tab-width 4 --write"
     },
     "husky": {
         "hooks": {
