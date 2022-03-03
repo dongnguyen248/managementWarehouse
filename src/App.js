@@ -6,12 +6,8 @@ import ExportHistory from './pages/HistoryExport/ExportHistory';
 import ImportHistory from './pages/HistoryImport/ImportHistory';
 import 'react-datepicker/dist/react-datepicker.css';
 import './App.css';
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    useRoutes,
-} from 'react-router-dom';
+import { Routes, Route, useRoutes } from 'react-router-dom';
+import UsersList from 'pages/paginateTest/UsersList';
 
 function App() {
     return (
@@ -21,6 +17,8 @@ function App() {
                 <Route path='/inventory' element={<Inventory />} />
                 <Route path='/history-export' element={<ExportHistory />} />
                 <Route path='/history-import' element={<ImportHistory />} />
+                <Route path='/user-list' element={<UsersList />} />
+
                 <Route path='/login' element={<Login />} />
             </Routes>
         </div>

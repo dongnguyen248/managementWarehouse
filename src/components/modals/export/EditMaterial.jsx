@@ -1,21 +1,13 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-import './InventoryModals.css';
-function ExportMaterial({ data }) {
-    console.log(data[0]);
+
+function EditMaterial({ data }) {
+    console.log(data);
     const [material, setMaterial] = useState({
-        qCode: data[0].qcode,
-        inputDate: data[0].inputdate,
-        outputDate: new Date(),
-        inventories: data[0].inventories,
-        exportQuantity: '',
-        line: '',
-        accCode: '',
-        requester: '',
-        dept: '',
+        inputDate: new Date(),
     });
-    const handleExport = () => {
-        console.log(material);
+    const handleSubmit = () => {
+        console.log('first');
     };
     return (
         <>
@@ -27,10 +19,9 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={material.qCode}
+                                defaultValue={data.qcode}
                                 type='text'
                                 className='form-control'
-                                disabled
                             />
                         </td>
                     </tr>
@@ -39,94 +30,70 @@ function ExportMaterial({ data }) {
                             <label>Input Date</label>
                         </td>
                         <td>
-                            <input
-                                defaultValue={material.inputDate}
-                                type='text'
-                                className='form-control'
-                                disabled
-                            />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className='tdleft'>
-                            <label>Output Date</label>
-                        </td>
-                        <td>
                             <DatePicker
-                                defaultValue={data[0].inputdate}
-                                type='text'
                                 className='form-control'
-                                selected={material.outputDate}
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        outputDate: e.target.value,
-                                    })
-                                }
+                                selected={material.inputDate}
+                                defaultValue={(material.inputDate = new Date())}
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Inventories</label>
+                            <label>Quantity</label>
                         </td>
                         <td>
                             <input
-                                defaultValue={data[0].inventories}
+                                defaultValue={data.quantity}
                                 type='text'
                                 className='form-control'
-                                disabled
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Export Quantity</label>
+                            <label>Price</label>
                         </td>
                         <td>
                             <input
+                                defaultValue={data.price}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        exportQuantity: e.target.value,
-                                    })
-                                }
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Line</label>
+                            <label>PO Number</label>
                         </td>
                         <td>
                             <input
+                                defaultValue={data.poNumber}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        line: e.target.value,
-                                    })
-                                }
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Accountant Code</label>
+                            <label>Supplier</label>
                         </td>
                         <td>
                             <input
+                                defaultValue={data.supplier}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        accCode: e.target.value,
-                                    })
-                                }
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className='tdleft'>
+                            <label>Buyer</label>
+                        </td>
+                        <td>
+                            <input
+                                defaultValue={data.buyer}
+                                type='text'
+                                className='form-control'
                             />
                         </td>
                     </tr>
@@ -136,31 +103,21 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
+                                defaultValue={data.requester}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        requester: e.target.value,
-                                    })
-                                }
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Department</label>
+                            <label>Received</label>
                         </td>
                         <td>
                             <input
+                                defaultValue={(data.received = true)}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        dept: e.target.value,
-                                    })
-                                }
                             />
                         </td>
                     </tr>
@@ -170,12 +127,12 @@ function ExportMaterial({ data }) {
                 <button
                     type='button'
                     className='btn btn-primary me-3'
-                    onClick={handleExport}>
-                    Export Material
+                    onClick={handleSubmit}>
+                    Save Material
                 </button>
             </div>
         </>
     );
 }
 
-export default ExportMaterial;
+export default EditMaterial;

@@ -3,7 +3,26 @@ import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
 
 const EditMaterial = ({ data }) => {
-    const [material, setMaterial] = useState(data);
+    const [material, setMaterial] = useState({
+        startDate: new Date(),
+        checkedDate: new Date(),
+        qCode: data.qCode,
+        area: '',
+        location: '',
+        item: '',
+        spec: '',
+        unit: '',
+        inventories: 0,
+        price: 0,
+        buyer: '',
+        poNumber: '',
+        receiver: '',
+        remark: '',
+        supplier: '',
+        checked: false,
+        checkResult: '',
+        received: false,
+    });
     const handleSaveMaterial = () => {
         console.log(material);
     };
@@ -108,20 +127,15 @@ const EditMaterial = ({ data }) => {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Quantity</label>
+                            <label>Inventories</label>
                         </td>
                         <td>
                             <input
-                                defaultValue={data.quantity}
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        quantity: e.target.value,
-                                    })
-                                }
+                                defaultValue={data.inventories}
                                 type='text'
                                 className='form-control'
                                 required='required'
+                                disabled
                             />
                         </td>
                         <td className='tdleft'>
@@ -130,15 +144,10 @@ const EditMaterial = ({ data }) => {
                         <td>
                             <input
                                 defaultValue={data.price}
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        price: e.target.value,
-                                    })
-                                }
                                 type='text'
                                 className='form-control'
                                 required='required'
+                                disabled
                             />
                         </td>
                     </tr>
@@ -147,15 +156,9 @@ const EditMaterial = ({ data }) => {
                             <label>Input Date</label>
                         </td>
                         <td>
-                            <DatePicker
-                                dateFormat='yyyy-MM-dd'
-                                selected={material.startDate}
-                                onChange={(date: Date) =>
-                                    setMaterial({
-                                        ...material,
-                                        startDate: date,
-                                    })
-                                }
+                            <input
+                                defaultValue={data.inputdate}
+                                disabled
                                 className='form-control'
                             />
                         </td>

@@ -1,8 +1,53 @@
-function ExportHistorySearch() {
+import { useState } from 'react';
+import DatePicker from 'react-datepicker';
+function ImportHistorySearch() {
+    var date = new Date();
+    const [startDate, setStartDate] = useState(
+        new Date(date.getFullYear(), date.getMonth(), 1),
+    );
+    const [endDate, setEndDate] = useState(new Date());
+    const hanleSearchItem = () => {
+        console.log('first');
+    };
+    const hanleReportExcel = () => {
+        console.log('second');
+    };
     return (
-        <div className='d-flex mb-2 justify-content-between'>
-            <form className='d-flex '>
-                <div className='form-outline ms-2 me-1 d-flex '>
+        <>
+            <form className='d-flex mb-2 align-items-center'>
+                <div className='form-outline  ms-2 me-1 d-flex '>
+                    <label
+                        className='form-label d-flex flex-column justify-content-center'
+                        htmlFor='formstart'>
+                        From:
+                    </label>
+                    <DatePicker
+                        dateFormat='yyyy-MM-dd'
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        type='text'
+                        id='formstart'
+                        className='form-control'
+                        placeholder='Enter Qcode'
+                    />
+                </div>
+                <div className='form-outline  ms-2 me-1 d-flex '>
+                    <label
+                        className='form-label d-flex flex-column justify-content-center'
+                        htmlFor='formend'>
+                        From:
+                    </label>
+                    <DatePicker
+                        dateFormat='yyyy-MM-dd'
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        type='text'
+                        id='formend'
+                        className='form-control'
+                        placeholder='Enter Qcode'
+                    />
+                </div>
+                <div className='form-outline  ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
                         htmlFor='formqcode'>
@@ -15,50 +60,24 @@ function ExportHistorySearch() {
                         placeholder='Enter Qcode'
                     />
                 </div>
-                <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
+                <div className='form-outline  ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formzone'>
-                        Zone:
+                        htmlFor='formponumber'>
+                        PO:
                     </label>
                     <input
                         type='text'
-                        id='formZone'
+                        id='formponumber'
                         className='form-control'
-                        placeholder='Enter Zone'
+                        placeholder='Enter ponumber'
                     />
                 </div>
-                <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
-                    <label
-                        className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formlocation'>
-                        Location:
-                    </label>
-                    <input
-                        type='text'
-                        id='formlocation'
-                        className='form-control'
-                        placeholder='Enter location'
-                    />
-                </div>
-                <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
-                    <label
-                        className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formitem'>
-                        Item:
-                    </label>
-                    <input
-                        type='text'
-                        id='formitem'
-                        className='form-control'
-                        placeholder='Enter item'
-                    />
-                </div>
-                <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
+                <div className='form-outline  ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
                         htmlFor='formspec'>
-                        Specification:
+                        Spec:
                     </label>
                     <input
                         type='text'
@@ -67,14 +86,22 @@ function ExportHistorySearch() {
                         placeholder='Enter spec'
                     />
                 </div>
+
                 <button
                     type='button'
-                    className='btn btn-primary button__export'>
+                    className='btn btn-primary btn-sm button__export'
+                    onClick={hanleSearchItem}>
                     Search
                 </button>
+                <button
+                    type='button'
+                    className='btn btn-primary btn-sm button__export'
+                    onClick={hanleReportExcel}>
+                    ExcelReport
+                </button>
             </form>
-        </div>
+        </>
     );
 }
 
-export default ExportHistorySearch;
+export default ImportHistorySearch;

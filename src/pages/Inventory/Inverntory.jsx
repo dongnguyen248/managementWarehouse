@@ -10,8 +10,12 @@ import './Inventory.css';
 import inventories from './datainventory';
 import EditMaterial from 'components/modals/inventory/EditMaterial';
 import ViewTable from 'components/viewtable/ViewTable';
+import ExportMaterial from 'components/modals/inventory/ExportMaterial';
 
 export default function Inverntory() {
+    useEffect(() => {
+        document.title = 'Inventory History';
+    }, []);
     const [dataInventories, setDataInventories] = useState(inventories);
     const [handleMaterial, setHandleMaterial] = useState({
         newMaterial: false,
@@ -22,8 +26,8 @@ export default function Inverntory() {
     const [materialEdit, setMaterialEdit] = useState({});
     const columns = [
         {
-            name: 'Zone',
-            selector: (row) => row.zone,
+            name: 'Area',
+            selector: (row) => row.area,
             grow: 0.5,
             wrap: true,
         },
@@ -53,9 +57,9 @@ export default function Inverntory() {
             selector: (row) => row.unit,
         },
         {
-            name: 'Quantity',
-            selector: (row) => row.quantity,
-            grow: 0.3,
+            name: 'Inventories',
+            selector: (row) => row.inventories,
+            grow: 0.5,
         },
         {
             name: 'Locator',
@@ -116,6 +120,11 @@ export default function Inverntory() {
             ? swal('Please select an  item!')
             : setHandleMaterial({ addQuantity: true });
     };
+    const hanldeExportMaterial = () => {
+        !itemSelected.length
+            ? swal('Please select an  item!')
+            : setHandleMaterial({ exportMaterial: true });
+    };
     const rowPreExpanded = (row) => row.defaultExpanded;
     return (
         <>
@@ -145,9 +154,7 @@ export default function Inverntory() {
                     <button
                         type='button'
                         className='btn btn-primary btn-sm button__export'
-                        onClick={() =>
-                            setHandleMaterial({ addQuantity: true })
-                        }>
+                        onClick={hanldeExportMaterial}>
                         Export Material
                     </button>
                 </div>
@@ -160,6 +167,7 @@ export default function Inverntory() {
                     expandableRows
                     expandableRowExpanded={rowPreExpanded}
                     expandableRowsComponent={ViewTable}
+                    highlightOnHover
                     pagination
                 />
             </div>
@@ -201,7 +209,9 @@ export default function Inverntory() {
                         Export Material
                     </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>...</Modal.Body>
+                <Modal.Body>
+                    <ExportMaterial data={itemSelected} />
+                </Modal.Body>
             </Modal>
             <Modal
                 size='lg'

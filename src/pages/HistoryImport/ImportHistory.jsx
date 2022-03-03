@@ -1,10 +1,17 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Header from 'components/header/Header';
 import ImportHistorySearch from 'components/searchingForm/ImportHistorySearch';
 import dataImport from './dataImport';
+import EditMaterial from 'components/modals/Import/EditMaterial';
+import { Modal } from 'react-bootstrap';
 
 export default function ImportHistory() {
+    const [editMaterial, setEditMaterial] = useState(false);
+    const [materialSelect, setMaterialSelect] = useState([]);
+    useEffect(() => {
+        document.title = 'Import History';
+    }, []);
     const handleDelete = useCallback(
         (row) => async () => {
             console.log(row);
@@ -13,7 +20,8 @@ export default function ImportHistory() {
     );
     const handleEdit = useCallback(
         (row) => async () => {
-            console.log(row);
+            setEditMaterial(true);
+            setMaterialSelect(row);
         },
         [],
     );
@@ -26,11 +34,13 @@ export default function ImportHistory() {
         {
             name: 'Item',
             selector: (row) => row.item,
+            wrap: true,
         },
         {
             name: 'Location',
             selector: (row) => row.location,
             grow: 0.3,
+            wrap: true,
         },
         {
             name: 'Specification',
@@ -62,10 +72,12 @@ export default function ImportHistory() {
         {
             name: 'Supplier',
             selector: (row) => row.supplier,
+            wrap: true,
         },
         {
             name: 'Buyer',
             selector: (row) => row.buyer,
+            wrap: true,
         },
         {
             name: 'Requester',
@@ -74,10 +86,12 @@ export default function ImportHistory() {
         {
             name: 'Locator',
             selector: (row) => row.locator,
+            wrap: true,
         },
         {
             name: 'Remark',
             selector: (row) => row.remark,
+            wrap: true,
         },
         {
             cell: (row) => (
@@ -105,8 +119,28 @@ export default function ImportHistory() {
             <div className='swrap'>
                 <h1 className='header__list'>Import History List</h1>
                 <ImportHistorySearch />
-                <DataTable columns={columns} data={dataImport} pagination />;
+                <DataTable
+                    columns={columns}
+                    data={dataImport}
+                    pagination
+                    highlightOnHover
+                />
+                ;
             </div>
+            <Modal
+                size='lg'
+                show={editMaterial}
+                onHide={() => setEditMaterial(false)}
+                aria-labelledby='edit-modal-sizes-title-lg'>
+                <Modal.Header closeButton>
+                    <Modal.Title id='edit-modal-sizes-title-lg'>
+                        Edit Import Material
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <EditMaterial data={materialSelect} />
+                </Modal.Body>
+            </Modal>
         </>
     );
 }

@@ -12,6 +12,13 @@ function ImportHistorySearch() {
     const hanleReportExcel = () => {
         console.log('second');
     };
+    const [itemSearch, setItemSearch] = useState({
+        startDate: startDate,
+        endDate: endDate,
+        qCode: '',
+        poNumber: '',
+        line: '',
+    });
     return (
         <>
             <form className='d-flex mb-2 align-items-center'>
@@ -35,7 +42,7 @@ function ImportHistorySearch() {
                     <label
                         className='form-label d-flex flex-column justify-content-center'
                         htmlFor='formend'>
-                        From:
+                        To:
                     </label>
                     <DatePicker
                         dateFormat='yyyy-MM-dd'
@@ -76,12 +83,12 @@ function ImportHistorySearch() {
 
                 <div className='form-check'>
                     <label
-                        className='form-check-label'
+                        className='form-check-label me-4'
                         htmlFor='flexCheckDefault'>
                         Received
                     </label>
                     <input
-                        className='form-check-input'
+                        className='form-check-input float-md-end'
                         type='checkbox'
                         value=''
                         id='flexCheckDefault'
@@ -124,7 +131,7 @@ function ImportHistorySearch() {
                     type='button'
                     className='btn btn-primary btn-sm button__export'
                     onClick={hanleReportExcel}>
-                    ReportExcel
+                    ExcelReport
                 </button>
             </form>
         </>

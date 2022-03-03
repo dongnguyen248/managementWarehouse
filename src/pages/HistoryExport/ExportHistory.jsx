@@ -4,8 +4,16 @@ import exports from './dataExport';
 import { useCallback, useEffect, useState } from 'react';
 import './ExportHistory.css';
 import ExportHistorySearch from 'components/searchingForm/ExportHistorySearch';
+import EditMaterial from 'components/modals/export/EditMaterial';
+import { Modal } from 'react-bootstrap';
 
 export default function ExportHistory() {
+    useEffect(() => {
+        document.title = 'Export History';
+    }, []);
+    const [editMaterial, setEditMaterial] = useState(false);
+    const [historyep, setHistoryep] = useState(exports);
+    const [materialSelect, setMaterialSelect] = useState([]);
     const columns = [
         {
             name: 'Zone',
@@ -72,7 +80,6 @@ export default function ExportHistory() {
         },
     ];
 
-    const [historyep, setHistoryep] = useState(exports);
     const handleDelete = useCallback(
         (row) => async () => {
             console.log(row);
@@ -81,7 +88,8 @@ export default function ExportHistory() {
     );
     const handleEdit = useCallback(
         (row) => async () => {
-            console.log(row);
+            setEditMaterial(true);
+            setMaterialSelect(row);
         },
         [],
     );
@@ -122,9 +130,24 @@ export default function ExportHistory() {
                     data={historyep}
                     onRowClicked={handleRowClicked}
                     conditionalRowStyles={conditionalRowStyles}
+                    highlightOnHover
                     pagination
                 />
             </div>
+            <Modal
+                size='lg'
+                show={editMaterial}
+                onHide={() => setEditMaterial(false)}
+                aria-labelledby='edit-modal-sizes-title-lg'>
+                <Modal.Header closeButton>
+                    <Modal.Title id='edit-modal-sizes-title-lg'>
+                        Edit Export Material
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <EditMaterial data={materialSelect} />
+                </Modal.Body>
+            </Modal>
         </>
     );
 }

@@ -5,10 +5,10 @@ import React from 'react';
 
 const ImportMaterial = () => {
     const [material, setMaterial] = useState({
-        startDate: new Date(),
+        inputDate: new Date(),
         checkedDate: new Date(),
         qCode: '',
-        area: [],
+        area: '',
         location: '',
         item: '',
         spec: '',
@@ -17,11 +17,11 @@ const ImportMaterial = () => {
         price: 0,
         buyer: '',
         poNumber: '',
-        receiver: [],
+        receiver: '',
         remark: '',
         supplier: '',
         checked: false,
-        checkResult: [],
+        checkResult: '',
         received: false,
     });
     const handleSaveMaterial = () => {
@@ -163,11 +163,11 @@ const ImportMaterial = () => {
                         <td>
                             <DatePicker
                                 dateFormat='yyyy-MM-dd'
-                                selected={material.startDate}
+                                selected={material.inputDate}
                                 onChange={(date: Date) =>
                                     setMaterial({
                                         ...material,
-                                        startDate: date,
+                                        inputDate: date,
                                     })
                                 }
                                 className='form-control'
@@ -273,7 +273,7 @@ const ImportMaterial = () => {
                                     })
                                 }
                                 type='checkbox'
-                                name='chkinpection'
+                                className='form-check-input'
                             />
                         </td>
 
@@ -357,6 +357,7 @@ const ImportMaterial = () => {
                         <td>
                             <input
                                 type='checkbox'
+                                className='form-check-input'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,

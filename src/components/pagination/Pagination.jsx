@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function Pagination() {
     function getNumberOfPages(rowCount, rowsPerPage) {
         return Math.ceil(rowCount / rowsPerPage);
@@ -40,44 +38,41 @@ export default function Pagination() {
 
         return (
             <nav>
-                <ul className="pagination">
-                    <li className="page-item">
+                <ul className='pagination'>
+                    <li className='page-item'>
                         <button
-                            className="page-link"
+                            className='page-link'
                             onClick={handleBackButtonClick}
                             disabled={previosDisabled}
                             aria-disabled={previosDisabled}
-                            aria-label="previous page"
-                        >
+                            aria-label='previous page'>
                             Previous
                         </button>
                     </li>
                     {pageItems.map((page) => {
                         const className =
                             page === currentPage
-                                ? "page-item active"
-                                : "page-item";
+                                ? 'page-item active'
+                                : 'page-item';
 
                         return (
                             <li key={page} className={className}>
                                 <button
-                                    className="page-link"
+                                    className='page-link'
                                     onClick={handlePageNumber}
-                                    value={page}
-                                >
+                                    value={page}>
                                     {page}
                                 </button>
                             </li>
                         );
                     })}
-                    <li className="page-item">
+                    <li className='page-item'>
                         <button
-                            className="page-link"
+                            className='page-link'
                             onClick={handleNextButtonClick}
                             disabled={nextDisabled}
                             aria-disabled={nextDisabled}
-                            aria-label="next page"
-                        >
+                            aria-label='next page'>
                             Next
                         </button>
                     </li>
@@ -91,17 +86,17 @@ export default function Pagination() {
 
 const columns = [
     {
-        name: "Title",
+        name: 'Title',
         selector: (row) => row.title,
         sortable: true,
     },
     {
-        name: "Directior",
+        name: 'Directior',
         selector: (row) => row.director,
         sortable: true,
     },
     {
-        name: "Runtime (m)",
+        name: 'Runtime (m)',
         selector: (row) => row.runtime,
         sortable: true,
         right: true,
@@ -109,43 +104,39 @@ const columns = [
     {
         button: true,
         cell: () => (
-            <div className="App">
-                <div class="openbtn text-center">
+            <div className='App'>
+                <div class='openbtn text-center'>
                     <button
-                        type="button"
-                        class="btn btn-primary"
-                        data-bs-toggle="modal"
-                        data-bs-target="#myModal"
-                    >
+                        type='button'
+                        class='btn btn-primary'
+                        data-bs-toggle='modal'
+                        data-bs-target='#myModal'>
                         Open modal
                     </button>
-                    <div class="modal" tabindex="-1" id="myModal">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Modal title</h5>
+                    <div class='modal' tabindex='-1' id='myModal'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h5 class='modal-title'>Modal title</h5>
                                     <button
-                                        type="button"
-                                        class="btn-close"
-                                        data-bs-dismiss="modal"
-                                        aria-label="Close"
-                                    ></button>
+                                        type='button'
+                                        class='btn-close'
+                                        data-bs-dismiss='modal'
+                                        aria-label='Close'></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class='modal-body'>
                                     <p>Modal body text goes here.</p>
                                 </div>
-                                <div class="modal-footer">
+                                <div class='modal-footer'>
                                     <button
-                                        type="button"
-                                        class="btn btn-secondary"
-                                        data-bs-dismiss="modal"
-                                    >
+                                        type='button'
+                                        class='btn btn-secondary'
+                                        data-bs-dismiss='modal'>
                                         Close
                                     </button>
                                     <button
-                                        type="button"
-                                        class="btn btn-primary"
-                                    >
+                                        type='button'
+                                        class='btn btn-primary'>
                                         Save changes
                                     </button>
                                 </div>

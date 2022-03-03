@@ -1,6 +1,15 @@
+import { useState } from 'react';
+
 export default function InventorySearch() {
-    const hanleSearchItem = () => {
-        console.log('search item');
+    const [item, setItem] = useState({
+        qCode: '',
+        area: '',
+        location: '',
+        item: '',
+        spec: '',
+    });
+    const hanleSearchQcode = () => {
+        console.log(item);
     };
     return (
         <>
@@ -16,19 +25,25 @@ export default function InventorySearch() {
                         id='formqcode'
                         className='form-control'
                         placeholder='Enter Qcode'
+                        onChange={(e) =>
+                            setItem({ ...item, qCode: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
                         htmlFor='formzone'>
-                        Zone:
+                        Area:
                     </label>
                     <input
                         type='text'
                         id='formZone'
                         className='form-control'
-                        placeholder='Enter Zone'
+                        placeholder='Enter Area'
+                        onChange={(e) =>
+                            setItem({ ...item, area: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
@@ -42,6 +57,9 @@ export default function InventorySearch() {
                         id='formlocation'
                         className='form-control'
                         placeholder='Enter location'
+                        onChange={(e) =>
+                            setItem({ ...item, location: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
@@ -55,6 +73,9 @@ export default function InventorySearch() {
                         id='formitem'
                         className='form-control'
                         placeholder='Enter item'
+                        onChange={(e) =>
+                            setItem({ ...item, item: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline ms-2 me-1 d-flex justify-content-center'>
@@ -68,12 +89,15 @@ export default function InventorySearch() {
                         id='formspec'
                         className='form-control'
                         placeholder='Enter spec'
+                        onChange={(e) =>
+                            setItem({ ...item, spec: e.target.value })
+                        }
                     />
                 </div>
                 <button
                     type='button'
                     className='btn btn-primary button__export'
-                    onClick={hanleSearchItem}>
+                    onClick={hanleSearchQcode}>
                     Search
                 </button>
             </form>
