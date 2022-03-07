@@ -3,7 +3,7 @@ import Header from 'components/header/Header';
 import { Modal } from 'react-bootstrap';
 import swal from 'sweetalert';
 import { useState, useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import NewMaterial from 'components/modals/inventory/NewMaterial';
 import AddQuantity from 'components/modals/inventory/AddQuantity';
@@ -12,19 +12,23 @@ import './Inventory.css';
 import EditMaterial from 'components/modals/inventory/EditMaterial';
 import ViewTable from 'components/viewtable/ViewTable';
 import ExportMaterial from 'components/modals/inventory/ExportMaterial';
-import { GetInventories } from 'store/inventory/inventoriesRedux';
+import { GetInventories } from 'store/inventoriesRedux';
+import { getInventories } from 'services/inventoriesService';
 // fake data
-import inventories from './datainventory';
+import inven from './datainventory';
 
 export default function Inverntory() {
     const dispath = useDispatch();
+    const { inventories } = useSelector((state) => state.inventories);
+    console.log(inventories);
     useEffect(() => {
         document.title = 'Inventory History';
     }, []);
-    // useEffect(()=>{
-    //     useDispatch(GetInventories)
-    // },[])
-    const [dataInventories, setDataInventories] = useState(inventories);
+
+    useEffect(() => {
+        dispath(getInventories());
+    }, [dispath]);
+    const [dataInventories, setDataInventories] = useState(inven);
     const [handleMaterial, setHandleMaterial] = useState({
         newMaterial: false,
         addQuantity: false,
@@ -89,6 +93,7 @@ export default function Inverntory() {
             grow: 0.3,
         },
     ];
+
     const handleEdit = useCallback(
         (row) => async () => {
             setMaterialEdit(row);

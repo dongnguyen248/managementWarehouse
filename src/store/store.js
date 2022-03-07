@@ -1,6 +1,9 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import userRedux from './user/userRedux';
-// import userReducer from './userRedux';
+import userRedux from './userRedux';
+import { inventoriesSlice } from 'store/inventoriesRedux';
+import storage from 'redux-persist/lib/storage';
+import inventoriesReducer from 'store/inventoriesRedux';
+
 import {
     persistStore,
     persistReducer,
@@ -11,7 +14,6 @@ import {
     PURGE,
     REGISTER,
 } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 const persistConfig = {
     key: 'root',
     version: 1,
@@ -21,7 +23,7 @@ const rootReducers = combineReducers({ user: userRedux });
 const persistedReducer = persistReducer(persistConfig, rootReducers);
 
 export const store = configureStore({
-    reducer: persistedReducer,
+    reducer: { persistedReducer, inventories: inventoriesReducer },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {

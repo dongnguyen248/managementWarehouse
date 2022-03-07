@@ -3,7 +3,7 @@ import {
     loginStart,
     loginSuccess,
     logoutSuccess,
-} from '../store/user/userRedux';
+} from '../store/userRedux';
 import { publicRequest } from '../utilities/requestMethod.js';
 
 export const login = async (dispatch, user) => {

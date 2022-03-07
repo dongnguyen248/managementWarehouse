@@ -11,7 +11,8 @@ import { Routes, Route, useRoutes, Navigate } from 'react-router-dom';
 import UsersList from 'pages/paginateTest/UsersList';
 
 function App() {
-    const user = useSelector((state) => state.user.currentUser);
+    const user = true;
+    // useSelector((state) => state.user.currentUser);
 
     return (
         <div className='App'>
