@@ -2,7 +2,6 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 
 function EditMaterial({ data }) {
-    console.log(data);
     const [material, setMaterial] = useState({
         inputDate: new Date(),
     });

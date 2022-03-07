@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://localhost:44377/api';
-// const BASE_URL = 'http://localhost:9000/api';
+const apiUrl =
+    !process.env.NODE_ENV || process.env.NODE_ENV === 'development'
+        ? process.env.REACT_APP_API_URL_DEV
+        : process.env.REACT_APP_API_URL_PROD;
 let TOKEN = '';
+
 if (JSON.parse(localStorage.getItem('persist:root')) != null) {
     if (
         JSON.parse(JSON.parse(localStorage.getItem('persist:root')).user)
@@ -14,9 +17,12 @@ if (JSON.parse(localStorage.getItem('persist:root')) != null) {
     }
 }
 export const publicRequest = axios.create({
-    baseURL: BASE_URL,
+    baseURL: apiUrl,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 export const userRequest = axios.create({
-    baseURL: BASE_URL,
+    baseURL: apiUrl,
     headers: { token: `Bear ${TOKEN}` },
 });

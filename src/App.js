@@ -5,21 +5,26 @@ import Inventory from './pages/Inventory/Inverntory';
 import ExportHistory from './pages/HistoryExport/ExportHistory';
 import ImportHistory from './pages/HistoryImport/ImportHistory';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useSelector } from 'react-redux';
 import './App.css';
-import { Routes, Route, useRoutes } from 'react-router-dom';
+import { Routes, Route, useRoutes, Navigate } from 'react-router-dom';
 import UsersList from 'pages/paginateTest/UsersList';
 
 function App() {
+    const user = useSelector((state) => state.user.currentUser);
+
     return (
         <div className='App'>
             <Routes>
-                <Route path='/' element={<Home />} />
-                <Route path='/inventory' element={<Inventory />} />
+                <Route path='/' element={<Inventory />} />
+                {/* <Route path="/inventory" element={<Inventory />} /> */}
                 <Route path='/history-export' element={<ExportHistory />} />
                 <Route path='/history-import' element={<ImportHistory />} />
                 <Route path='/user-list' element={<UsersList />} />
-
-                <Route path='/login' element={<Login />} />
+                <Route
+                    path='/login'
+                    element={user ? <Navigate to='/' /> : <Login />}
+                />
             </Routes>
         </div>
     );

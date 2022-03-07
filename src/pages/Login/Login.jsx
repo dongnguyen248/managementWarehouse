@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import Header from '../../components/header/Header';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from 'services/userService';
+
 import './Login.css';
-import Validator from 'validate';
 export default function Login() {
+    const dispatch = useDispatch();
     const [user, setUser] = useState({
-        userName: '',
-        password: '',
+        employeeId: '',
+        passwordOriginal: '',
     });
-    console.log(Validator.isRequired(user.userName));
+
     const handleSignIn = (e) => {
         e.preventDefault();
-        console.log(user);
+        login(dispatch, user);
     };
     useEffect(() => {
         document.title = 'Login';
@@ -47,7 +50,7 @@ export default function Login() {
                                             onChange={(e) =>
                                                 setUser({
                                                     ...user,
-                                                    userName: e.target.value,
+                                                    employeeId: e.target.value,
                                                 })
                                             }
                                         />
@@ -66,7 +69,8 @@ export default function Login() {
                                             onChange={(e) =>
                                                 setUser({
                                                     ...user,
-                                                    userName: e.target.value,
+                                                    passwordOriginal:
+                                                        e.target.value,
                                                 })
                                             }
                                             required
