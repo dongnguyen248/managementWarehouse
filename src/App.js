@@ -11,14 +11,12 @@ import { Routes, Route, useRoutes, Navigate } from 'react-router-dom';
 import UsersList from 'pages/paginateTest/UsersList';
 
 function App() {
-    const user = true;
-    // useSelector((state) => state.user.currentUser);
-
+    const user = useSelector((state) => state.persistedReducer.user.currentUser);
+    // console.log(user)
     return (
         <div className='App'>
             <Routes>
                 <Route path='/' element={<Inventory />} />
-                {/* <Route path="/inventory" element={<Inventory />} /> */}
                 <Route path='/history-export' element={<ExportHistory />} />
                 <Route path='/history-import' element={<ImportHistory />} />
                 <Route path='/user-list' element={<UsersList />} />

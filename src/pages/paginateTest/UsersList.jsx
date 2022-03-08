@@ -1,7 +1,8 @@
-import Header from 'components/header/Header';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import axios from 'axios';
+import Header from "components/header/Header";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import DataTable from "react-data-table-component";
+import axios from "axios";
+import { publicRequest } from "utilities/requestMethod";
 
 function UsersList() {
     const [data, setData] = useState([]);
@@ -11,11 +12,11 @@ function UsersList() {
     const [currentPage, setCurrentPage] = useState(1);
     const fetchUsers = async (page, size = perPage) => {
         setLoading(true);
-
-        const response = await axios.get(
-            `https://reqres.in/api/users?page=${page}&per_page=${size}&delay=1`,
+        const res = await publicRequest.get(
+            `/material/${currentPage}/${perPage}`
         );
-
+        const response = res;
+        console.log(res);
         setData(response.data.data);
         setTotalRows(response.data.total);
         setLoading(false);
@@ -24,13 +25,13 @@ function UsersList() {
         (row) => async () => {
             await axios.delete(`https://reqres.in/api/users/${row.id}`);
             const response = await axios.get(
-                `https://reqres.in/api/users?page=${currentPage}&per_page=${perPage}`,
+                `https://reqres.in/api/users?page=${currentPage}&per_page=${perPage}`
             );
 
             setData(removeItem(response.data.data, row));
             setTotalRows(totalRows - 1);
         },
-        [currentPage, perPage, totalRows],
+        [currentPage, perPage, totalRows]
     );
     useEffect(() => {
         fetchUsers(1);
@@ -38,18 +39,18 @@ function UsersList() {
     const columns = useMemo(
         () => [
             {
-                name: 'First Name',
-                selector: 'first_name',
+                name: "First Name",
+                selector: "first_name",
                 sortable: true,
             },
             {
-                name: 'Last Name',
-                selector: 'last_name',
+                name: "Last Name",
+                selector: "last_name",
                 sortable: true,
             },
             {
-                name: 'Email',
-                selector: 'email',
+                name: "Email",
+                selector: "email",
                 sortable: true,
             },
             {
@@ -59,14 +60,14 @@ function UsersList() {
                 ),
             },
         ],
-        [handleDelete],
+        [handleDelete]
     );
 
     const removeItem = (array, item) => {
         const newArray = array.slice();
         newArray.splice(
             newArray.findIndex((a) => a === item),
-            1,
+            1
         );
 
         return newArray;
@@ -83,10 +84,10 @@ function UsersList() {
     };
 
     return (
-        <div className='swrap'>
+        <div className="swrap">
             <Header />
             <DataTable
-                title='Users'
+                title="Users"
                 columns={columns}
                 data={data}
                 progressPending={loading}

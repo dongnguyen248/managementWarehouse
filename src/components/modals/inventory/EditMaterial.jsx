@@ -3,6 +3,7 @@ import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
 
 const EditMaterial = ({ data }) => {
+    
     const [material, setMaterial] = useState({
         startDate: new Date(),
         checkedDate: new Date(),
@@ -36,13 +37,8 @@ const EditMaterial = ({ data }) => {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.qcode}
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        qCode: e.target.value,
-                                    })
-                                }
+                                defaultValue={data.qCode}
+                                disabled
                                 type='text'
                                 className='form-control'
                             />
@@ -131,7 +127,7 @@ const EditMaterial = ({ data }) => {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.inventories}
+                                defaultValue={data.inventory}
                                 type='text'
                                 className='form-control'
                                 required='required'
@@ -157,7 +153,7 @@ const EditMaterial = ({ data }) => {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.inputdate}
+                                defaultValue={data.lastImportDate   }
                                 disabled
                                 className='form-control'
                             />

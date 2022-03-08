@@ -5,8 +5,9 @@ import './Header.css';
 import { logout } from 'services/userService';
 
 export default function Header() {
-    const user = true;
-    // useSelector((state) => state.user.currentUser);
+    
+    const user = useSelector((state) => state.persistedReducer.user.currentUser);
+
     const dispatch = useDispatch();
     const handleLogout = () => {
         logout(dispatch);
