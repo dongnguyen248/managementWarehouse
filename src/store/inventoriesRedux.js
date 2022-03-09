@@ -1,5 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getInventories,addInventories,searchInventories } from 'services/inventoriesService';
+import {
+    getInventories,
+    addInventories,
+    searchInventories,
+} from 'services/inventoriesService';
 
 const inventoriesSlice = createSlice({
     name: 'inventories',
@@ -23,7 +27,8 @@ const inventoriesSlice = createSlice({
         },
         [searchInventories.fulfilled]: (state, action) => {
             state.status = 'success';
-            state.inventories = action.payload;
+            console.log(action.payload.items);
+            state.inventories = action.payload.items;
         },
         [searchInventories.rejected]: (state, action) => {
             state.status = 'failed';
