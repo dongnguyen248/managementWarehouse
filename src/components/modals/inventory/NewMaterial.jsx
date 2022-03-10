@@ -1,31 +1,77 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { createMaterial } from 'services/inventoriesService';
 
 const ImportMaterial = () => {
+    const dispatch = useDispatch();
+    const [location, setLocation] = useState('');
+    const [areaId, setAreaId] = useState(1);
+    const [locator, setLocator] = useState('');
+    const { unit } = useSelector((state) => state.unit);
+    const { line } = useSelector((state) => state.line);
+    const { area } = useSelector((state) => state.area);
     const [material, setMaterial] = useState({
         inputDate: new Date(),
         checkedDate: new Date(),
         qCode: '',
-        area: '',
-        location: '',
         item: '',
-        spec: '',
         unit: '',
-        quantity: 0,
+        Specification: '',
         price: 0,
-        buyer: '',
-        poNumber: '',
-        receiver: '',
-        remark: '',
-        supplier: '',
+        Remark: '',
         checked: false,
-        checkResult: '',
-        received: false,
+        checkResult: true,
+        allocated: false,
+        Po: '',
+        LineRequest: '',
+        quantity: 0,
+        supplier: '',
+        buyer: '',
+        checker: '',
     });
+
+    useEffect(() => {
+        let areaName = area?.filter((item) => item.id == areaId);
+        if (areaName.length !== 0) {
+            setLocator('QMA01.' + areaName[0].name + '-' + location);
+        } else {
+            setLocator('QMA01.');
+        }
+    }, [areaId, location]);
     const handleSaveMaterial = () => {
-        console.log(material);
+        dispatch(
+            createMaterial({
+                location: location,
+                qCode: material.qCode,
+                item: material.item,
+                unit: material.unit,
+                Specification: material.Specification,
+                Remark: material.Remark,
+                Zone: areaId,
+                importHistories: [
+                    {
+                        ImportDate: material.inputDate,
+                        price: material.price,
+                        quantity: material.quantity,
+                        supplier: material.supplier,
+                        lineRequest: material.LineRequest,
+                        buyer: material.buyer,
+                        po: material.Po,
+                        handler: 1,
+                        allocated: material.allocated,
+                        inspection: {
+                            status: material.checkResult,
+                            inspector: material.checker,
+                            result: material.checked,
+                        },
+                    },
+                ],
+            }),
+        );
+        console.log({ ...material, Zone: areaId });
     };
 
     return (
@@ -52,10 +98,22 @@ const ImportMaterial = () => {
                             <label>Area</label>
                         </td>
                         <td>
-                            <select className='form-control'>
-                                <option className='form-control'>
-                                    MAIN WAREHOUSE
-                                </option>
+                            <select
+                                className='form-control'
+                                onChange={(e) => {
+                                    return setAreaId(e.target.value);
+                                }}
+                                defaultValue={1}>
+                                {area?.map((item) => {
+                                    return (
+                                        <option
+                                            className='form-control'
+                                            key={item.id}
+                                            value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
                             </select>
                         </td>
                     </tr>
@@ -65,12 +123,7 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        location: e.target.value,
-                                    })
-                                }
+                                onChange={(e) => setLocation(e.target.value)}
                                 type='text'
                                 className='form-control'
                             />
@@ -100,7 +153,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        spec: e.target.value,
+                                        Specification: e.target.value,
                                     })
                                 }
                                 className='form-control'></textarea>
@@ -109,17 +162,25 @@ const ImportMaterial = () => {
                             <label>Unit</label>
                         </td>
                         <td>
-                            <input
+                            <select
+                                className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
                                         unit: e.target.value,
                                     })
-                                }
-                                type='text'
-                                className='form-control'
-                                required='required'
-                            />
+                                }>
+                                {unit?.map((item) => {
+                                    return (
+                                        <option
+                                            className='form-control'
+                                            key={item.id}
+                                            value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -181,7 +242,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        poNumber: e.target.value,
+                                        Po: e.target.value,
                                     })
                                 }
                                 type='text'
@@ -232,15 +293,18 @@ const ImportMaterial = () => {
                                     onChange={(e) =>
                                         setMaterial({
                                             ...material,
-                                            receiver: e.target.value,
+                                            LineRequest: e.target.value,
                                         })
                                     }>
-                                    <option className='form-control'>
-                                        5 S
-                                    </option>
-                                    <option className='form-control'>
-                                        CAPL Line
-                                    </option>
+                                    {line?.map((item) => {
+                                        return (
+                                            <option
+                                                key={item.id}
+                                                value={item.id}>
+                                                {item.name}
+                                            </option>
+                                        );
+                                    })}
                                 </select>
                             </label>
                         </td>
@@ -252,7 +316,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        remark: e.target.value,
+                                        Remark: e.target.value,
                                     })
                                 }
                                 className='form-control'
@@ -321,7 +385,10 @@ const ImportMaterial = () => {
                                     onChange={(e) => {
                                         setMaterial({
                                             ...material,
-                                            checkResult: e.target.value,
+                                            checkResult:
+                                                e.target.value === 'ACCEPT'
+                                                    ? true
+                                                    : false,
                                         });
                                     }}>
                                     <option className='form-control'>
@@ -341,12 +408,8 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
-                                onChange={(e) => {
-                                    setMaterial({
-                                        ...material,
-                                        locator: e.target.value,
-                                    });
-                                }}
+                                disabled
+                                defaultValue={locator}
                                 type='text'
                                 className='form-control'
                             />

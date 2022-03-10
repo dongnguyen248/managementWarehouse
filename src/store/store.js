@@ -1,8 +1,10 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import userRedux from './userRedux';
-import { inventoriesSlice } from 'store/inventoriesRedux';
 import storage from 'redux-persist/lib/storage';
 import inventoriesReducer from 'store/inventoriesRedux';
+import lineReducer from 'store/lineRecieverRedux';
+import unitReducer from 'store/unitRedux';
+import areaReducer from 'store/areaRedux';
 
 import {
     persistStore,
@@ -23,7 +25,13 @@ const rootReducers = combineReducers({ user: userRedux });
 const persistedReducer = persistReducer(persistConfig, rootReducers);
 
 export const store = configureStore({
-    reducer: { persistedReducer, inventories: inventoriesReducer },
+    reducer: {
+        persistedReducer,
+        inventories: inventoriesReducer,
+        unit: unitReducer,
+        line: lineReducer,
+        area: areaReducer,
+    },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             serializableCheck: {

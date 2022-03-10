@@ -13,7 +13,7 @@ if (JSON.parse(localStorage.getItem('persist:root')) != null) {
     ) {
         TOKEN = JSON.parse(
             JSON.parse(localStorage.getItem('persist:root')).user,
-        ).currentUser.accessToken;
+        ).currentUser.token;
     }
 }
 export const publicRequest = axios.create({
@@ -24,5 +24,6 @@ export const publicRequest = axios.create({
 });
 export const userRequest = axios.create({
     baseURL: apiUrl,
-    headers: { token: `Bear ${TOKEN}` },
+    headers: { Authorization: `Bearer ${TOKEN}` },
 });
+console.log(TOKEN);

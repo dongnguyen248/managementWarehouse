@@ -12,7 +12,12 @@ import './Inventory.css';
 import EditMaterial from 'components/modals/inventory/EditMaterial';
 import ViewTable from 'components/viewtable/ViewTable';
 import ExportMaterial from 'components/modals/inventory/ExportMaterial';
-import { getInventories } from 'services/inventoriesService';
+import {
+    getArea,
+    getInventories,
+    getLineReciever,
+    getUnit,
+} from 'services/inventoriesService';
 
 export default function Inverntory() {
     const [loading, setLoading] = useState(false);
@@ -22,13 +27,19 @@ export default function Inverntory() {
     const [dataInventories, setDataInventories] = useState([]);
     const dispath = useDispatch();
     const { inventories } = useSelector((state) => state.inventories);
-    console.log(inventories.items);
+
+    useEffect(() => {
+        dispath(getLineReciever());
+        dispath(getUnit());
+        dispath(getArea());
+    }, []);
     useEffect(() => {
         dispath(getInventories({ currentPage, perPage }));
-        inventories.items ? setLoading(false) : setLoading(true);
-        setDataInventories(inventories.items);
         setTotalRows(inventories.totalRows);
-    }, [dispath, currentPage, perPage, inventories.totalRows]);
+    }, [currentPage, perPage]);
+    useEffect(() => {
+        setDataInventories(inventories.items);
+    }, [inventories.items]);
 
     useEffect(() => {
         document.title = 'Inventory History';

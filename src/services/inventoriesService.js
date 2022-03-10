@@ -26,3 +26,34 @@ export const searchInventories = createAsyncThunk(
         return res.data;
     },
 );
+export const getLineReciever = createAsyncThunk(
+    'getLineReciever',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/line');
+        return res.data;
+    },
+);
+export const getUnit = createAsyncThunk(
+    'getUnit',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/unit');
+        return res.data;
+    },
+);
+export const getArea = createAsyncThunk(
+    'getArea',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/zone');
+        return res.data;
+    },
+);
+
+export const createMaterial = createAsyncThunk(
+    'createMaterial',
+    async (data, { rejectWithValue }) => {
+        console.log(data);
+        const res = await userRequest.post('/material', data);
+        console.log(res);
+        return res.data;
+    },
+);

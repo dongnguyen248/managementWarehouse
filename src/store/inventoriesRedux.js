@@ -3,6 +3,7 @@ import {
     getInventories,
     addInventories,
     searchInventories,
+    createMaterial,
 } from 'services/inventoriesService';
 
 const inventoriesSlice = createSlice({
@@ -28,7 +29,7 @@ const inventoriesSlice = createSlice({
         [searchInventories.fulfilled]: (state, action) => {
             state.status = 'success';
             console.log(action.payload.items);
-            state.inventories = action.payload.items;
+            state.inventories = action.payload;
         },
         [searchInventories.rejected]: (state, action) => {
             state.status = 'failed';
@@ -42,6 +43,16 @@ const inventoriesSlice = createSlice({
             state.inventories = action.payload;
         },
         [addInventories.rejected]: (state, action) => {
+            state.status = 'failed';
+        },
+        [createMaterial.pending]: (state, action) => {
+            state.status = 'loading';
+        },
+        [createMaterial.fulfilled]: (state, action) => {
+            state.status = 'success';
+            state.inventories = action.payload;
+        },
+        [createMaterial.rejected]: (state, action) => {
             state.status = 'failed';
         },
     },
