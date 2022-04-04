@@ -5,13 +5,25 @@ import ImportHistorySearch from 'components/searchingForm/ImportHistorySearch';
 import dataImport from './dataImport';
 import EditMaterial from 'components/modals/Import/EditMaterial';
 import { Modal } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { getImportHistories } from 'services/importHistoriesService';
 
 export default function ImportHistory() {
     const [editMaterial, setEditMaterial] = useState(false);
     const [materialSelect, setMaterialSelect] = useState([]);
+    const [totalRows, setTotalRows] = useState(0);
+    const [perPage, setPerPage] = useState(10);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [dataImportHistories, setDataImportHistories] = useState([]);
+    const dispath = useDispatch();
+    const { importHistories } = useSelector((state) => state.importHistories);
     useEffect(() => {
         document.title = 'Import History';
     }, []);
+    useEffect(() => {
+        dispath(getImportHistories({ currentPage, perPage }));
+        setTotalRows(importHistories.totalRows);
+    }, [currentPage, perPage]);
     const handleDelete = useCallback(
         (row) => async () => {
             console.log(row);
@@ -25,10 +37,11 @@ export default function ImportHistory() {
         },
         [],
     );
+
     const columns = [
         {
             name: 'Qcode',
-            selector: (row) => row.qcode,
+            selector: (row) => row.qCode,
             grow: 0.3,
         },
         {
@@ -44,21 +57,17 @@ export default function ImportHistory() {
         },
         {
             name: 'Specification',
-            selector: (row) => row.spec,
+            selector: (row) => row.specification,
             grow: 2,
             wrap: true,
         },
         {
             name: 'Import Date',
-            selector: (row) => row.importdate,
-            grow: 0.3,
+            selector: (row) => row.lastImportDate,
+            grow: 1,
             wrap: true,
         },
-        {
-            name: 'Quantity',
-            selector: (row) => row.quantity,
-            grow: 0.3,
-        },
+
         {
             name: 'Price',
             selector: (row) => row.price,
@@ -66,8 +75,8 @@ export default function ImportHistory() {
         },
         {
             name: 'PO Number',
-            selector: (row) => row.ponumber,
-            grow: 0.3,
+            selector: (row) => row.po,
+            grow: 1,
         },
         {
             name: 'Supplier',
@@ -121,7 +130,7 @@ export default function ImportHistory() {
                 <ImportHistorySearch />
                 <DataTable
                     columns={columns}
-                    data={dataImport}
+                    data={importHistories.items}
                     pagination
                     highlightOnHover
                 />

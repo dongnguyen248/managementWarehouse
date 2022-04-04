@@ -5,6 +5,7 @@ import inventoriesReducer from 'store/inventoriesRedux';
 import lineReducer from 'store/lineRecieverRedux';
 import unitReducer from 'store/unitRedux';
 import areaReducer from 'store/areaRedux';
+import importHistiriesReducer from 'store/importHistoriesRedux';
 
 import {
     persistStore,
@@ -31,6 +32,7 @@ export const store = configureStore({
         unit: unitReducer,
         line: lineReducer,
         area: areaReducer,
+        importHistories: importHistiriesReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -26,4 +26,3 @@ export const userRequest = axios.create({
     baseURL: apiUrl,
     headers: { Authorization: `Bearer ${TOKEN}` },
 });
-console.log(TOKEN);

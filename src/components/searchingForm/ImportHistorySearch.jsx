@@ -1,24 +1,66 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
+import { searchImportHistory } from 'services/importHistoriesService';
+import moment from 'moment';
 function ImportHistorySearch() {
     var date = new Date();
+    const dispath = useDispatch();
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
     );
     const [endDate, setEndDate] = useState(new Date());
+    const { importHistories } = useSelector((state) => state.importHistories);
+    const [item, setItem] = useState({
+        dateFrom: moment.utc(startDate).local().format('YYYY-MM-DD'),
+        dateTo: moment.utc(endDate).local().format('YYYY-MM-DD'),
+        qCode: '',
+        Po: '',
+        Line: '',
+        Supplier: '',
+    });
     const hanleSearchItem = () => {
-        console.log('first');
+        let option = '/search?';
+        let condition = [];
+        if (item.qCode.length !== 0) {
+            condition.push(`qcode=${item.qCode}`);
+        }
+        if (item.dateFrom.length !== 0) {
+            condition.push(`dateFrom=${item.dateFrom}`);
+        }
+        if (item.dateTo.length !== 0) {
+            condition.push(`dateTo=${item.dateTo}`);
+        }
+        if (item.Line.length !== 0) {
+            condition.push(`Line=${item.Line}`);
+        }
+        if (item.Po.length !== 0) {
+            condition.push(`Po=${item.Po}`);
+        }
+        if (item.Supplier.length !== 0) {
+            condition.push(`Supplier=${item.Supplier}`);
+        }
+        for (let index = 0; index < condition.length; index++) {
+            if (index === 0) {
+                option += condition[index];
+            } else {
+                option += `&${condition[index]}`;
+            }
+        }
+        if (condition.length === 0) {
+            return;
+        }
+        dispath(
+            searchImportHistory({
+                option,
+                currentPage: importHistories.pageIndex,
+                perPage: importHistories.pageSize,
+            }),
+        );
     };
     const hanleReportExcel = () => {
         console.log('second');
     };
-    const [itemSearch, setItemSearch] = useState({
-        startDate: startDate,
-        endDate: endDate,
-        qCode: '',
-        poNumber: '',
-        line: '',
-    });
     return (
         <>
             <form className='d-flex mb-2 align-items-center'>
@@ -65,6 +107,12 @@ function ImportHistorySearch() {
                         id='formqcode'
                         className='form-control'
                         placeholder='Enter Qcode'
+                        onChange={(e) =>
+                            setItem({
+                                ...item,
+                                qCode: e.target.value,
+                            })
+                        }
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
@@ -78,6 +126,12 @@ function ImportHistorySearch() {
                         id='formponumber'
                         className='form-control'
                         placeholder='Enter ponumber'
+                        onChange={(e) =>
+                            setItem({
+                                ...item,
+                                Po: e.target.value,
+                            })
+                        }
                     />
                 </div>
 
@@ -105,6 +159,12 @@ function ImportHistorySearch() {
                         id='formline'
                         className='form-control'
                         placeholder='Enter line'
+                        onChange={(e) =>
+                            setItem({
+                                ...item,
+                                Line: e.target.value,
+                            })
+                        }
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
@@ -118,6 +178,12 @@ function ImportHistorySearch() {
                         id='formsupplier'
                         className='form-control'
                         placeholder='Enter supplier'
+                        onChange={(e) =>
+                            setItem({
+                                ...item,
+                                Supplier: e.target.value,
+                            })
+                        }
                     />
                 </div>
 

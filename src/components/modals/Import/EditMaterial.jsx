@@ -5,6 +5,7 @@ function EditMaterial({ data }) {
     const [material, setMaterial] = useState({
         inputDate: new Date(),
     });
+    console.log(data);
     const handleSubmit = () => {
         console.log('first');
     };
@@ -18,7 +19,7 @@ function EditMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.qcode}
+                                defaultValue={data.qCode}
                                 type='text'
                                 className='form-control'
                             />

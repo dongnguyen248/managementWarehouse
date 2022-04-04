@@ -20,6 +20,7 @@ export const addInventories = createAsyncThunk(
 export const searchInventories = createAsyncThunk(
     'searchInventories',
     async (arg, { rejectWithValue }) => {
+        console.log(arg);
         const res = await publicRequest.get(
             `material/${arg.currentPage}/${arg.perPage}` + arg.option,
         );

@@ -1,11 +1,22 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
+
 function ImportHistorySearch() {
     var date = new Date();
+
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
     );
     const [endDate, setEndDate] = useState(new Date());
+    const [item, setItem] = useState({
+        fromDate: startDate,
+        toDate: endDate,
+        Qcode: '',
+        Po: '',
+        Line: '',
+        Suplier: '',
+    });
     const hanleSearchItem = () => {
         console.log('first');
     };
