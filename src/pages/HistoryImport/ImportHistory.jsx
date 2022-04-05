@@ -7,6 +7,7 @@ import EditMaterial from 'components/modals/Import/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getImportHistories } from 'services/importHistoriesService';
+import { getLineReciever } from 'services/inventoriesService';
 
 export default function ImportHistory() {
     const [editMaterial, setEditMaterial] = useState(false);
@@ -17,6 +18,9 @@ export default function ImportHistory() {
     const [dataImportHistories, setDataImportHistories] = useState([]);
     const dispath = useDispatch();
     const { importHistories } = useSelector((state) => state.importHistories);
+    useEffect(() => {
+        dispath(getLineReciever());
+    }, []);
     useEffect(() => {
         document.title = 'Import History';
     }, []);

@@ -2,7 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
     getImportHistories,
     searchImportHistory,
+    updateImportHistory
 } from 'services/importHistoriesService';
+
 
 const importHistoriesSlice = createSlice({
     name: 'importHistories',
@@ -23,9 +25,14 @@ const importHistoriesSlice = createSlice({
         },
         [searchImportHistory.fulfilled]: (state, action) => {
             state.status = 'success';
-            console.log(action.payload);
             state.importHistories = action.payload;
         },
+        [updateImportHistory.pending]:(state,action)=>{
+            state.status='loading'
+        },
+        [updateImportHistory.fulfilled]:(state,action)=>{
+            state.status ='succsess';
+        }
     },
 });
 export default importHistoriesSlice.reducer;
