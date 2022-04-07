@@ -219,7 +219,7 @@ const ImportMaterial = () => {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Input Date</label>
+                            <label>Import Date</label>
                         </td>
                         <td>
                             <DatePicker

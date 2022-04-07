@@ -3,7 +3,7 @@ import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
 
 const EditMaterial = ({ data }) => {
-    
+    console.log(data);
     const [material, setMaterial] = useState({
         startDate: new Date(),
         checkedDate: new Date(),
@@ -153,7 +153,7 @@ const EditMaterial = ({ data }) => {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.lastImportDate   }
+                                defaultValue={data.lastImportDate}
                                 disabled
                                 className='form-control'
                             />

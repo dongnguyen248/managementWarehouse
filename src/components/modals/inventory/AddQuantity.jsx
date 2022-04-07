@@ -3,8 +3,8 @@ import DatePicker from 'react-datepicker';
 import './InventoryModals.css';
 function AddQuantity({ data }) {
     const [quantity, setQuantity] = useState({
-        qCode: data[0].qcode,
-        inputDate: new Date(),
+        qCode: data[0].qCode,
+        inputDate: data[0].lastImportDate,
         quantity: '',
         price: '',
         poNumber: '',
@@ -40,7 +40,7 @@ function AddQuantity({ data }) {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Input Date</label>
+                            <label>Import Date</label>
                         </td>
                         <td>
                             <DatePicker

@@ -13,6 +13,7 @@ export const getInventories = createAsyncThunk(
 export const addInventories = createAsyncThunk(
     'addInventories',
     async (data, { rejectWithValue }) => {
+        console.log(data);
         const res = await userRequest.post('/addinventories', data);
         return res.data;
     },
@@ -48,7 +49,21 @@ export const getArea = createAsyncThunk(
         return res.data;
     },
 );
+export const getCostAccounts = createAsyncThunk(
+    'getCoustAccount',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/CostAccount');
+        return res.data;
+    },
+);
 
+export const getDepartment = createAsyncThunk(
+    'getDeparment',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/deparment');
+        return res.data;
+    },
+);
 export const createMaterial = createAsyncThunk(
     'createMaterial',
     async (data, { rejectWithValue }) => {

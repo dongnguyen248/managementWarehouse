@@ -1,19 +1,35 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
+import { useSelector } from 'react-redux';
+import swal from 'sweetalert';
 import './InventoryModals.css';
 function ExportMaterial({ data }) {
-    console.log(data[0]);
+    const { line } = useSelector((state) => state.line);
+    const { costAccounts } = useSelector((state) => state.costAccounts);
+    const { departments } = useSelector((state) => state.departments);
+    const [exportValue, setExportValue] = useState(0);
+    const [departmentId, setDeparmentId] = useState(1);
+    const [costAccountItems, setcostAccountItems] = useState([]);
+    const [inventoriesss, setInventories] = useState(data[0].inventory);
     const [material, setMaterial] = useState({
-        qCode: data[0].qcode,
-        inputDate: data[0].inputdate,
+        qCode: data[0].qCode,
+        inputDate: data[0].lastImportDate,
         outputDate: new Date(),
-        inventories: data[0].inventories,
-        exportQuantity: '',
+        inventories: data[0].inventory,
+        exportQuantity: exportValue,
         line: '',
         accCode: '',
         requester: '',
-        dept: '',
+        dept: departmentId,
+        Note: '',
     });
+    useEffect(() => {
+        setcostAccountItems(
+            costAccounts.filter((c) => {
+                return c.id == departmentId;
+            }),
+        );
+    }, [departmentId]);
     const handleExport = () => {
         console.log(material);
     };
@@ -36,7 +52,7 @@ function ExportMaterial({ data }) {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Input Date</label>
+                            <label>Import Date</label>
                         </td>
                         <td>
                             <input
@@ -49,7 +65,7 @@ function ExportMaterial({ data }) {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Output Date</label>
+                            <label>Export Date</label>
                         </td>
                         <td>
                             <DatePicker
@@ -72,7 +88,7 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={data[0].inventories}
+                                defaultValue={data[0].inventory}
                                 type='text'
                                 className='form-control'
                                 disabled
@@ -85,49 +101,92 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
+                                defaultValue={exportValue}
                                 type='text'
                                 className='form-control'
-                                onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        exportQuantity: e.target.value,
-                                    })
-                                }
+                                onChange={(e) => {
+                                    let minusInventories =
+                                        data[0].inventory - e.target.value;
+                                    minusInventories >= 0
+                                        ? setExportValue(e.target.value)
+                                        : swal(
+                                              "quanity export can't be more than inventories",
+                                          ).then(function () {
+                                              e.target.value = 0;
+                                          });
+                                }}
                             />
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Line</label>
+                            <label>Line Recive</label>
                         </td>
                         <td>
-                            <input
-                                type='text'
+                            <select
                                 className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
                                         line: e.target.value,
                                     })
-                                }
-                            />
+                                }>
+                                {line?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
                         </td>
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Accountant Code</label>
+                            <label>Account Code</label>
                         </td>
                         <td>
-                            <input
-                                type='text'
+                            <select
+                                className='form-control '
+                                defaultValue={departmentId}
+                                onChange={(e) =>
+                                    setDeparmentId(e.target.value)
+                                }>
+                                {costAccounts?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </td>
+                        <td className='tdleft'>
+                            <label>Note</label>
+                        </td>
+                        <td>
+                            <select
                                 className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        accCode: e.target.value,
+                                        Note: e.target.value,
                                     })
-                                }
-                            />
+                                }>
+                                {costAccountItems.length !== 0
+                                    ? costAccountItems[0].costAccountItems?.map(
+                                          (item) => {
+                                              return (
+                                                  <option
+                                                      key={item.id}
+                                                      value={item.id}>
+                                                      {item.note}
+                                                  </option>
+                                              );
+                                          },
+                                      )
+                                    : console.log('first')}
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -152,13 +211,34 @@ function ExportMaterial({ data }) {
                             <label>Department</label>
                         </td>
                         <td>
+                            <select
+                                className='form-control'
+                                onChange={(e) =>
+                                    setMaterial({
+                                        ...material,
+                                        dept: e.target.value,
+                                    })
+                                }>
+                                {departments?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
+                        </td>
+                        <td className='tdleft'>
+                            <label>Note</label>
+                        </td>
+                        <td>
                             <input
                                 type='text'
                                 className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        dept: e.target.value,
+                                        Note: e.target.value,
                                     })
                                 }
                             />

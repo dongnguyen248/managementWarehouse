@@ -2,12 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import Header from 'components/header/Header';
 import ImportHistorySearch from 'components/searchingForm/ImportHistorySearch';
-import dataImport from './dataImport';
 import EditMaterial from 'components/modals/Import/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getImportHistories } from 'services/importHistoriesService';
-import { getLineReciever } from 'services/inventoriesService';
+import { getCostAccounts, getLineReciever } from 'services/inventoriesService';
 
 export default function ImportHistory() {
     const [editMaterial, setEditMaterial] = useState(false);
@@ -37,7 +36,8 @@ export default function ImportHistory() {
     const handleEdit = useCallback(
         (row) => async () => {
             setEditMaterial(true);
-            setMaterialSelect(row);
+            setMaterialSelect({ row });
+            console.log(editMaterial);
         },
         [],
     );

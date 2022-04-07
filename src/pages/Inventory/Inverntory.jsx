@@ -4,7 +4,6 @@ import { Modal } from 'react-bootstrap';
 import swal from 'sweetalert';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import NewMaterial from 'components/modals/inventory/NewMaterial';
 import AddQuantity from 'components/modals/inventory/AddQuantity';
 import InventorySearch from 'components/searchingForm/InventorySearch';
@@ -17,6 +16,8 @@ import {
     getInventories,
     getLineReciever,
     getUnit,
+    getCostAccounts,
+    getDepartment,
 } from 'services/inventoriesService';
 
 export default function Inverntory() {
@@ -32,6 +33,8 @@ export default function Inverntory() {
         dispath(getLineReciever());
         dispath(getUnit());
         dispath(getArea());
+        dispath(getCostAccounts());
+        dispath(getDepartment());
     }, []);
     useEffect(() => {
         dispath(getInventories({ currentPage, perPage }));
