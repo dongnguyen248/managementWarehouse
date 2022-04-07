@@ -3,22 +3,31 @@ import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createMaterial } from 'services/inventoriesService';
+import { createMaterial, getAllMaterial } from 'services/inventoriesService';
+import { createImportHistory } from 'services/importHistoriesService';
 
 const ImportMaterial = () => {
     const dispatch = useDispatch();
     const [location, setLocation] = useState('');
+    const [disableInput, setDisableInput] = useState(false);
+
     const [areaId, setAreaId] = useState(1);
     const [locator, setLocator] = useState('');
+    const [item, setItem] = useState('');
+    const [spec, setSpec] = useState('');
     const { unit } = useSelector((state) => state.unit);
+    const userId = useSelector(
+        (state) => state.persistedReducer.user.currentUser.employee.id,
+    );
     const { line } = useSelector((state) => state.line);
     const { area } = useSelector((state) => state.area);
+    const { materials } = useSelector((state) => state.materials);
     const [material, setMaterial] = useState({
         inputDate: new Date(),
         checkedDate: new Date(),
         qCode: '',
         item: '',
-        unit: '',
+        unit: 1,
         Specification: '',
         price: 0,
         Remark: '',
@@ -26,13 +35,30 @@ const ImportMaterial = () => {
         checkResult: true,
         allocated: false,
         Po: '',
-        LineRequest: '',
+        LineRequest: 63,
         quantity: 0,
         supplier: '',
         buyer: '',
         checker: '',
     });
+    const materialExist = materials?.filter((m) => m.qcode === material.qCode);
+    useEffect(() => {
+        if (materialExist.length !== 0) {
+            material.Specification = materialExist[0].specification;
+            material.item = materialExist[0].item;
+            setLocation(materialExist[0].location);
+            setDisableInput(true);
+        } else {
+            material.Specification = '';
+            material.item = '';
+            setLocation('');
+            setDisableInput(false);
+        }
+    }, [material.qCode]);
 
+    useEffect(() => {
+        dispatch(getAllMaterial());
+    }, []);
     useEffect(() => {
         let areaName = area?.filter((item) => item.id == areaId);
         if (areaName.length !== 0) {
@@ -42,36 +68,57 @@ const ImportMaterial = () => {
         }
     }, [areaId, location]);
     const handleSaveMaterial = () => {
-        dispatch(
-            createMaterial({
-                location: location,
-                qCode: material.qCode,
-                item: material.item,
-                unit: material.unit,
-                Specification: material.Specification,
-                Remark: material.Remark,
-                Zone: areaId,
-                importHistories: [
-                    {
-                        ImportDate: material.inputDate,
-                        price: material.price,
-                        quantity: material.quantity,
-                        supplier: material.supplier,
-                        lineRequest: material.LineRequest,
-                        buyer: material.buyer,
-                        po: material.Po,
-                        handler: 1,
-                        allocated: material.allocated,
-                        inspection: {
-                            status: material.checkResult,
-                            inspector: material.checker,
-                            result: material.checked,
-                        },
+        if (materialExist.length !== 0) {
+            dispatch(
+                createImportHistory({
+                    ImportDate: material.inputDate,
+                    price: material.price,
+                    quantity: material.quantity,
+                    supplier: material.supplier,
+                    lineRequest: material.LineRequest,
+                    buyer: material.buyer,
+                    po: material.Po,
+                    handler: userId,
+                    material: materialExist[0].id,
+                    allocated: material.allocated,
+                    inspection: {
+                        status: material.checkResult,
+                        inspector: material.checker,
+                        result: material.checked,
                     },
-                ],
-            }),
-        );
-        console.log({ ...material, Zone: areaId });
+                }),
+            );
+        } else {
+            dispatch(
+                createMaterial({
+                    location: location,
+                    qCode: material.qCode,
+                    item: material.item,
+                    unit: material.unit,
+                    Specification: material.Specification,
+                    Remark: material.Remark,
+                    Zone: areaId,
+                    importHistories: [
+                        {
+                            ImportDate: material.inputDate,
+                            price: material.price,
+                            quantity: material.quantity,
+                            supplier: material.supplier,
+                            lineRequest: material.LineRequest,
+                            buyer: material.buyer,
+                            po: material.Po,
+                            handler: userId,
+                            allocated: material.allocated,
+                            inspection: {
+                                status: material.checkResult,
+                                inspector: material.checker,
+                                result: material.checked,
+                            },
+                        },
+                    ],
+                }),
+            );
+        }
     };
 
     return (
@@ -87,7 +134,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        qCode: e.target.value,
+                                        qCode: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -95,10 +142,11 @@ const ImportMaterial = () => {
                             />
                         </td>
                         <td className='tdleft'>
-                            <label>Area</label>
+                            <label>Zone</label>
                         </td>
                         <td>
                             <select
+                                disabled={disableInput}
                                 className='form-control'
                                 onChange={(e) => {
                                     return setAreaId(e.target.value);
@@ -123,7 +171,11 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
-                                onChange={(e) => setLocation(e.target.value)}
+                                disabled={disableInput}
+                                value={location}
+                                onChange={(e) =>
+                                    setLocation(e.target.value.trim())
+                                }
                                 type='text'
                                 className='form-control'
                             />
@@ -133,10 +185,12 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <input
+                                disabled={disableInput}
+                                value={material.item}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        item: e.target.value,
+                                        item: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -150,10 +204,12 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <textarea
+                                disabled={disableInput}
+                                value={material.Specification}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        Specification: e.target.value,
+                                        Specification: e.target.value.trim(),
                                     })
                                 }
                                 className='form-control'></textarea>
@@ -163,7 +219,9 @@ const ImportMaterial = () => {
                         </td>
                         <td>
                             <select
+                                disabled={disableInput}
                                 className='form-control'
+                                defaultValue={1}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -192,7 +250,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        quantity: e.target.value,
+                                        quantity: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -208,7 +266,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        price: e.target.value,
+                                        price: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -242,7 +300,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        Po: e.target.value,
+                                        Po: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -259,7 +317,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        supplier: e.target.value,
+                                        supplier: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -274,7 +332,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        buyer: e.target.value,
+                                        buyer: e.target.value.trim(),
                                     })
                                 }
                                 type='text'
@@ -316,7 +374,7 @@ const ImportMaterial = () => {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        Remark: e.target.value,
+                                        Remark: e.target.value.trim(),
                                     })
                                 }
                                 className='form-control'
@@ -367,7 +425,7 @@ const ImportMaterial = () => {
                                 onChange={(e) => {
                                     setMaterial({
                                         ...material,
-                                        checker: e.target.value,
+                                        checker: e.target.value.trim(),
                                     });
                                 }}
                                 type='text'

@@ -1,4 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import swal from 'sweetalert';
 import { publicRequest, userRequest } from 'utilities/requestMethod';
 
 export const getInventories = createAsyncThunk(
@@ -10,18 +11,32 @@ export const getInventories = createAsyncThunk(
         return res.data;
     },
 );
+export const getAllMaterial = createAsyncThunk(
+    'getAllMaterial',
+    async (dispatch, getState) => {
+        const res = await publicRequest.get('/Material');
+        return res.data;
+    },
+);
 export const addInventories = createAsyncThunk(
     'addInventories',
     async (data, { rejectWithValue }) => {
-        console.log(data);
         const res = await userRequest.post('/addinventories', data);
+        res.status === 200
+            ? swal({
+                  title: 'Update Import',
+                  text: 'update Success!',
+                  type: 'success',
+              }).then(function () {
+                  window.location.replace('http://localhost:3000');
+              })
+            : swal('Some thing went wrong!');
         return res.data;
     },
 );
 export const searchInventories = createAsyncThunk(
     'searchInventories',
     async (arg, { rejectWithValue }) => {
-        console.log(arg);
         const res = await publicRequest.get(
             `material/${arg.currentPage}/${arg.perPage}` + arg.option,
         );
@@ -69,7 +84,15 @@ export const createMaterial = createAsyncThunk(
     async (data, { rejectWithValue }) => {
         console.log(data);
         const res = await userRequest.post('/material', data);
-        console.log(res);
+        res.status === 200
+            ? swal({
+                  title: 'Create New Material',
+                  text: 'Create Success!',
+                  type: 'success',
+              }).then(function () {
+                  window.location.replace('http://localhost:3000');
+              })
+            : swal('Some thing went wrong!');
         return res.data;
     },
 );

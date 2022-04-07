@@ -8,7 +8,7 @@ import areaReducer from 'store/areaRedux';
 import importHistiriesReducer from 'store/importHistoriesRedux';
 import costAccounts from './costAccountRedux';
 import departments from './departmentRedux';
-
+import materialRedux from './materialRedux';
 import {
     persistStore,
     persistReducer,
@@ -37,6 +37,7 @@ export const store = configureStore({
         importHistories: importHistiriesReducer,
         costAccounts: costAccounts,
         departments: departments,
+        materials: materialRedux,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

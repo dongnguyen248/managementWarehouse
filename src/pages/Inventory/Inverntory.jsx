@@ -18,6 +18,7 @@ import {
     getUnit,
     getCostAccounts,
     getDepartment,
+    getAllMaterial,
 } from 'services/inventoriesService';
 
 export default function Inverntory() {
@@ -104,11 +105,6 @@ export default function Inverntory() {
                 name: 'Locator',
                 selector: (row) => row.locator,
             },
-            {
-                name: 'Remark',
-                selector: (row) => row.remark,
-            },
-
             {
                 cell: (row) => (
                     <button

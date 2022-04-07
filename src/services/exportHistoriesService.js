@@ -20,7 +20,6 @@ export const getExportHistories = createAsyncThunk(
 export const searchExportHistories = createAsyncThunk(
     'searchExportHistories',
     async (arg, { rejectWithValue }) => {
-        console.log(arg);
         const res = await exportlicRequest.get(
             `export/${arg.currentPage}/${arg.perPage}` + arg.option,
         );

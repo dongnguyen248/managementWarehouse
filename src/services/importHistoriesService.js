@@ -24,11 +24,10 @@ export const searchImportHistory = createAsyncThunk(
 export const updateImportHistory = createAsyncThunk(
     'updateImportHistory',
     async (data, dispatch, getState) => {
-        const res = await publicRequest.post(
-            `ImportHistory/update-history-material?qCode=${data.qCode}&remark=${data.remark}`,
+        const res = await userRequest.post(
+            `ImportHistory/update-history-material`,
             data.importHistory,
         );
-        console.log(res);
         if (res.status === 200) {
             swal({
                 title: 'Update Import',
@@ -39,6 +38,28 @@ export const updateImportHistory = createAsyncThunk(
             });
         } else {
             swal('Update false please check and try again!');
+        }
+        return res.data;
+    },
+);
+export const createImportHistory = createAsyncThunk(
+    'createImportHistory',
+    async (data, dispatch, getState) => {
+        console.log(data);
+        const res = await userRequest.post(
+            `/ImportHistory/add-importHistory`,
+            data,
+        );
+        if (res.status === 200) {
+            swal({
+                title: 'Create New Material',
+                text: 'Create Success!',
+                type: 'success',
+            }).then(function () {
+                window.location.replace('http://localhost:3000/history-import');
+            });
+        } else {
+            swal('Create false please check and try again!');
         }
         return res.data;
     },
