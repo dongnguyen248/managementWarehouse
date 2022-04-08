@@ -5,7 +5,7 @@ import swal from 'sweetalert';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import NewMaterial from 'components/modals/inventory/NewMaterial';
-import AddQuantity from 'components/modals/inventory/AddQuantity';
+// import AddQuantity from 'components/modals/inventory/AddQuantity';
 import InventorySearch from 'components/searchingForm/InventorySearch';
 import './Inventory.css';
 import EditMaterial from 'components/modals/inventory/EditMaterial';
@@ -18,7 +18,6 @@ import {
     getUnit,
     getCostAccounts,
     getDepartment,
-    getAllMaterial,
 } from 'services/inventoriesService';
 
 export default function Inverntory() {
@@ -51,7 +50,7 @@ export default function Inverntory() {
 
     const [handleMaterial, setHandleMaterial] = useState({
         newMaterial: false,
-        addQuantity: false,
+        // addQuantity: false,
         exportMaterial: false,
         editMaterial: false,
     });
@@ -155,11 +154,11 @@ export default function Inverntory() {
     const itemSelected = dataInventories?.filter(
         (item) => item.toggleSelected === true,
     );
-    const handleAddQuantity = () => {
-        !itemSelected.length
-            ? swal('Please select an  item!')
-            : setHandleMaterial({ addQuantity: true });
-    };
+    // const handleAddQuantity = () => {
+    //     !itemSelected.length
+    //         ? swal('Please select an  item!')
+    //         : setHandleMaterial({ addQuantity: true });
+    // };
     const hanldeExportMaterial = () => {
         !itemSelected.length
             ? swal('Please select an  item!')
@@ -185,12 +184,12 @@ export default function Inverntory() {
                         }>
                         New Material
                     </button>
-                    <button
+                    {/* <button
                         type='button'
                         className='btn btn-primary btn-sm button__export'
                         onClick={handleAddQuantity}>
                         Add Quantity
-                    </button>
+                    </button> */}
                     <button
                         type='button'
                         className='btn btn-primary btn-sm button__export'
@@ -231,7 +230,7 @@ export default function Inverntory() {
                     <NewMaterial />
                 </Modal.Body>
             </Modal>
-            <Modal
+            {/* <Modal
                 size='lg'
                 show={handleMaterial.addQuantity}
                 onHide={() => setHandleMaterial(handleMaterial.addQuantity)}
@@ -244,7 +243,7 @@ export default function Inverntory() {
                 <Modal.Body>
                     <AddQuantity data={itemSelected} />
                 </Modal.Body>
-            </Modal>
+            </Modal> */}
             <Modal
                 size='lg'
                 show={handleMaterial.exportMaterial}

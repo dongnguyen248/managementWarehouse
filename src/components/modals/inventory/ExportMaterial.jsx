@@ -1,37 +1,52 @@
 import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addExportHistory } from 'services/exportHistoriesService';
 import swal from 'sweetalert';
 import './InventoryModals.css';
 function ExportMaterial({ data }) {
+    const dispatch = useDispatch();
     const { line } = useSelector((state) => state.line);
     const { costAccounts } = useSelector((state) => state.costAccounts);
     const { departments } = useSelector((state) => state.departments);
     const [exportValue, setExportValue] = useState(0);
-    const [departmentId, setDeparmentId] = useState(1);
-    const [costAccountItems, setcostAccountItems] = useState([]);
-    const [inventoriesss, setInventories] = useState(data[0].inventory);
+    const [CostAccountId, setCostAccountId] = useState(1);
+    const [departmentId, setDepartmentId] = useState(1);
+    const [costAccountItems, setCostAccountItems] = useState([]);
+    const [constAccoutItemId, setCostAccountItemId] = useState(1);
+    const userId = useSelector(
+        (state) => state.persistedReducer.user.currentUser.employee.id,
+    );
     const [material, setMaterial] = useState({
-        qCode: data[0].qCode,
-        inputDate: data[0].lastImportDate,
         outputDate: new Date(),
-        inventories: data[0].inventory,
-        exportQuantity: exportValue,
-        line: '',
+        line: 63,
         accCode: '',
         requester: '',
-        dept: departmentId,
         Note: '',
     });
     useEffect(() => {
-        setcostAccountItems(
-            costAccounts.filter((c) => {
-                return c.id == departmentId;
+        setCostAccountItems(
+            costAccounts?.filter((c) => {
+                return c.id === CostAccountId;
             }),
         );
-    }, [departmentId]);
+    }, [CostAccountId]);
     const handleExport = () => {
-        console.log(material);
+        dispatch(
+            addExportHistory({
+                Material: data[0].id,
+                ExportDate: data[0].lastImportDate,
+                Quantity: exportValue,
+                Requestor: material.requester,
+                Department: departmentId,
+                costAccount: CostAccountId,
+                costAccountItem: constAccoutItemId,
+                CreatedDate: material.outputDate,
+                Remart: material.Note,
+                Receiver: material.line,
+                Handler: userId,
+            }),
+        );
     };
     return (
         <>
@@ -43,7 +58,7 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={material.qCode}
+                                defaultValue={data[0].qCode}
                                 type='text'
                                 className='form-control'
                                 disabled
@@ -56,7 +71,7 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={material.inputDate}
+                                defaultValue={data[0].lastImportDate}
                                 type='text'
                                 className='form-control'
                                 disabled
@@ -124,6 +139,7 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <select
+                                defaultValue={63}
                                 className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
@@ -147,10 +163,10 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <select
+                                defaultValue={3}
                                 className='form-control '
-                                defaultValue={departmentId}
                                 onChange={(e) =>
-                                    setDeparmentId(e.target.value)
+                                    setCostAccountId(e.target.value)
                                 }>
                                 {costAccounts?.map((item) => {
                                     return (
@@ -167,11 +183,9 @@ function ExportMaterial({ data }) {
                         <td>
                             <select
                                 className='form-control'
+                                defaultValue={1}
                                 onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        Note: e.target.value,
-                                    })
+                                    setCostAccountItemId(e.target.value)
                                 }>
                                 {costAccountItems.length !== 0
                                     ? costAccountItems[0].costAccountItems?.map(
@@ -191,7 +205,7 @@ function ExportMaterial({ data }) {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Requester</label>
+                            <label>Requestor</label>
                         </td>
                         <td>
                             <input
@@ -212,12 +226,10 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <select
+                                defaultValue={1}
                                 className='form-control'
                                 onChange={(e) =>
-                                    setMaterial({
-                                        ...material,
-                                        dept: e.target.value,
-                                    })
+                                    setDepartmentId(e.target.value)
                                 }>
                                 {departments?.map((item) => {
                                     return (

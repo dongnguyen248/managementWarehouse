@@ -35,16 +35,6 @@ const inventoriesSlice = createSlice({
             state.status = 'failed';
         },
 
-        [addInventories.pending]: (state, action) => {
-            state.status = 'loading';
-        },
-        [addInventories.fulfilled]: (state, action) => {
-            state.status = 'success';
-            state.inventories = action.payload;
-        },
-        [addInventories.rejected]: (state, action) => {
-            state.status = 'failed';
-        },
         [createMaterial.pending]: (state, action) => {
             state.status = 'loading';
         },

@@ -6,11 +6,22 @@ import './ExportHistory.css';
 import ExportHistorySearch from 'components/searchingForm/ExportHistorySearch';
 import EditMaterial from 'components/modals/export/EditMaterial';
 import { Modal } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { getExportHistories } from 'services/exportHistoriesService';
 
 export default function ExportHistory() {
+    const dispatch = useDispatch();
+    const [totalRows, setTotalRows] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [dataExportHistories, setDataExportHistories] = useState([]);
+    const { exportHistories } = useSelector((state) => state.exportHistories);
+
     useEffect(() => {
-        document.title = 'Export History';
+        dispatch(getExportHistories({ currentPage, perPage }));
+        setDataExportHistories(exportHistories);
     }, []);
+
     const [editMaterial, setEditMaterial] = useState(false);
     const [historyep, setHistoryep] = useState(exports);
     const [materialSelect, setMaterialSelect] = useState([]);
@@ -22,7 +33,7 @@ export default function ExportHistory() {
         },
         {
             name: 'Qcode',
-            selector: (row) => row.qcode,
+            selector: (row) => row.qCode,
             grow: 0.5,
             wrap: true,
         },
@@ -37,7 +48,7 @@ export default function ExportHistory() {
         },
         {
             name: 'Specification',
-            selector: (row) => row.spec,
+            selector: (row) => row.specification,
             wrap: true,
             grow: 2,
         },
@@ -50,6 +61,21 @@ export default function ExportHistory() {
             name: 'Quantity',
             selector: (row) => row.quantity,
             grow: 0.3,
+        },
+        {
+            name: 'Line',
+            selector: (row) => row.line,
+            grow: 0.5,
+        },
+        {
+            name: 'Line Code',
+            selector: (row) => row.costLine,
+            grow: 1,
+        },
+        {
+            name: 'Accountant Code',
+            selector: (row) => row.costAccount,
+            grow: 1,
         },
         {
             name: 'Remark',
@@ -79,7 +105,15 @@ export default function ExportHistory() {
             grow: 1,
         },
     ];
+    const handlePageChange = (page) => {
+        getExportHistories(page);
+        setCurrentPage(page);
+    };
 
+    const handlePerRowsChange = async (newPerPage, page) => {
+        getExportHistories(page, newPerPage);
+        setPerPage(newPerPage);
+    };
     const handleDelete = useCallback(
         (row) => async () => {
             console.log(row);
@@ -127,7 +161,7 @@ export default function ExportHistory() {
 
                 <DataTable
                     columns={columns}
-                    data={historyep}
+                    data={exportHistories}
                     onRowClicked={handleRowClicked}
                     conditionalRowStyles={conditionalRowStyles}
                     highlightOnHover

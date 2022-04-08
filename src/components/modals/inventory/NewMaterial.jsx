@@ -13,8 +13,6 @@ const ImportMaterial = () => {
 
     const [areaId, setAreaId] = useState(1);
     const [locator, setLocator] = useState('');
-    const [item, setItem] = useState('');
-    const [spec, setSpec] = useState('');
     const { unit } = useSelector((state) => state.unit);
     const userId = useSelector(
         (state) => state.persistedReducer.user.currentUser.employee.id,
@@ -60,7 +58,7 @@ const ImportMaterial = () => {
         dispatch(getAllMaterial());
     }, []);
     useEffect(() => {
-        let areaName = area?.filter((item) => item.id == areaId);
+        let areaName = area?.filter((item) => item.id === areaId);
         if (areaName.length !== 0) {
             setLocator('QMA01.' + areaName[0].name + '-' + location);
         } else {
@@ -81,7 +79,7 @@ const ImportMaterial = () => {
                     handler: userId,
                     material: materialExist[0].id,
                     allocated: material.allocated,
-                    inspection: {
+                    InspectionNavigation: {
                         status: material.checkResult,
                         inspector: material.checker,
                         result: material.checked,
@@ -109,7 +107,7 @@ const ImportMaterial = () => {
                             po: material.Po,
                             handler: userId,
                             allocated: material.allocated,
-                            inspection: {
+                            InspectionNavigation: {
                                 status: material.checkResult,
                                 inspector: material.checker,
                                 result: material.checked,

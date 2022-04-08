@@ -18,22 +18,7 @@ export const getAllMaterial = createAsyncThunk(
         return res.data;
     },
 );
-export const addInventories = createAsyncThunk(
-    'addInventories',
-    async (data, { rejectWithValue }) => {
-        const res = await userRequest.post('/addinventories', data);
-        res.status === 200
-            ? swal({
-                  title: 'Update Import',
-                  text: 'update Success!',
-                  type: 'success',
-              }).then(function () {
-                  window.location.replace('http://localhost:3000');
-              })
-            : swal('Some thing went wrong!');
-        return res.data;
-    },
-);
+
 export const searchInventories = createAsyncThunk(
     'searchInventories',
     async (arg, { rejectWithValue }) => {
