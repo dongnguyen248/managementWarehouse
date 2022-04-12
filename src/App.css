@@ -3,40 +3,45 @@ ul {
     padding: 0;
     margin: 0;
 }
-a{
+a {
     text-decoration: none;
     color: #fff !important;
 }
-a:hover{
+a:hover {
     color: #fff;
 }
-.swrap{
+.swrap {
     margin-top: 80px;
 }
-*{
+* {
     font-family: 'Open Sans', sans-serif;
-
 }
 
 /* rewrite css react-datatable-component */
-.rdt_TableHeadRow{
-    background-color: RGB(152,177,199) !important;
+.rdt_TableHeadRow {
+    background-color: RGB(152, 177, 199) !important;
     font-weight: bold;
     font-size: 1rem;
     font-family: 'Open Sans', sans-serif;
 }
-.rdt_TableCell{
-    border-left:solid 0.1px #cccc !important;
-    border-right:solid 0.1px #cccc !important;
+.rdt_TableCell {
+    border-left: solid 0.1px #cccc !important;
+    border-right: solid 0.1px #cccc !important;
 }
-.rdt_TableCol{
-    border-left:solid 0.1px #fff !important;
-    border-right:solid 0.1px #fff !important;
+.rdt_TableCol {
+    border-left: solid 0.1px #fff !important;
+    border-right: solid 0.1px #fff !important;
 }
-.header__list{
+.header__list {
     text-align: center;
     background: #37a437;
     color: #fff;
     height: 60px;
     line-height: 60px;
-  }
+}
+
+/* rewrite css form bootstrap */
+
+.imput__width {
+    width: 10vw !important;
+}

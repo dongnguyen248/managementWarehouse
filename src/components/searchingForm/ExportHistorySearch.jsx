@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
+import { reportExcel } from 'services/exportHistoriesService';
 
 function ImportHistorySearch() {
     var date = new Date();
-
+    const dispatch = useDispatch();
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
     );
@@ -20,8 +21,12 @@ function ImportHistorySearch() {
     const hanleSearchItem = () => {
         console.log('first');
     };
-    const hanleReportExcel = () => {
+    const hanleExportExcel = () => {
         console.log('second');
+    };
+    const hanleReportExcel = () => {
+        console.log({ startDate, endDate });
+        dispatch(reportExcel({ startDate, endDate }));
     };
     return (
         <>
@@ -107,8 +112,14 @@ function ImportHistorySearch() {
                 <button
                     type='button'
                     className='btn btn-primary btn-sm button__export'
+                    onClick={hanleExportExcel}>
+                    Excel Export
+                </button>
+                <button
+                    type='button'
+                    className='btn btn-primary btn-sm button__export'
                     onClick={hanleReportExcel}>
-                    ExcelReport
+                    Excel Report
                 </button>
             </form>
         </>

@@ -1,6 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
-import { publicRequest } from 'utilities/requestMethod';
+import { publicRequest, userRequest } from 'utilities/requestMethod';
 
 export const addExportHistory = createAsyncThunk(
     'addExportHistory',
@@ -36,5 +36,12 @@ export const searchExportHistories = createAsyncThunk(
         );
 
         return res.data;
+    },
+);
+
+export const reportExcel = createAsyncThunk(
+    async (data, { rejectWithValue }) => {
+        console.log(data);
+        const res = await userRequest().post('/export/report-excel', data);
     },
 );

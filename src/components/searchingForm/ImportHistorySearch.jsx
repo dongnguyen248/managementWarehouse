@@ -58,8 +58,9 @@ function ImportHistorySearch() {
             }),
         );
     };
-    const hanleReportExcel = () => {
-        console.log('second');
+
+    const hanleExportExcel = () => {
+        console.log('first');
     };
     return (
         <>
@@ -96,9 +97,9 @@ function ImportHistorySearch() {
                         placeholder='Enter Qcode'
                     />
                 </div>
-                <div className='form-outline  ms-2 me-1 d-flex '>
+                <div className='form-group  ms-2 me-1 d-flex imput__width'>
                     <label
-                        className='form-label d-flex flex-column justify-content-center'
+                        className='form-label d-flex flex-column justify-content-center '
                         htmlFor='formqcode'>
                         Qcode:
                     </label>
@@ -115,7 +116,7 @@ function ImportHistorySearch() {
                         }
                     />
                 </div>
-                <div className='form-outline  ms-2 me-1 d-flex '>
+                <div className='form-group  ms-2 me-1 d-flex imput__width'>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
                         htmlFor='formponumber'>
@@ -196,8 +197,8 @@ function ImportHistorySearch() {
                 <button
                     type='button'
                     className='btn btn-primary btn-sm button__export'
-                    onClick={hanleReportExcel}>
-                    ExcelReport
+                    onClick={hanleExportExcel}>
+                    Excel Export
                 </button>
             </form>
         </>

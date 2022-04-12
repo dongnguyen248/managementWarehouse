@@ -35,13 +35,12 @@ function ExportMaterial({ data }) {
         dispatch(
             addExportHistory({
                 Material: data[0].id,
-                ExportDate: data[0].lastImportDate,
+                ExportDate: material.outputDate,
                 Quantity: exportValue,
                 Requestor: material.requester,
                 Department: departmentId,
                 costAccount: CostAccountId,
                 costAccountItem: constAccoutItemId,
-                CreatedDate: material.outputDate,
                 Remart: material.Note,
                 Receiver: material.line,
                 Handler: userId,
