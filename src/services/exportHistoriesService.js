@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import swal from 'sweetalert';
 import { publicRequest, userRequest } from 'utilities/requestMethod';
-
+import moment from 'moment';
 export const addExportHistory = createAsyncThunk(
     'addExportHistory',
     async (data, dispatch, getState) => {
@@ -40,8 +40,16 @@ export const searchExportHistories = createAsyncThunk(
 );
 
 export const reportExcel = createAsyncThunk(
+    'reportExcelDate',
     async (data, { rejectWithValue }) => {
         console.log(data);
-        const res = await userRequest().post('/export/report-excel', data);
+
+        // Export/export-excel?fromDate=2022-04-01&toDate=2022-04-08'
+        const res = await userRequest.get(
+            `export/export-excel?fromDate=${moment(data.startDate).format(
+                'YYYY-MM-DD',
+            )}&toDate=${moment(data.endDate).format('YYYY-MM-DD')}`,
+        );
+        return res.data;
     },
 );
