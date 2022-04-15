@@ -42,14 +42,27 @@ export const searchExportHistories = createAsyncThunk(
 export const reportExcel = createAsyncThunk(
     'reportExcelDate',
     async (data, { rejectWithValue }) => {
-        console.log(data);
-
-        // Export/export-excel?fromDate=2022-04-01&toDate=2022-04-08'
-        const res = await userRequest.get(
-            `export/export-excel?fromDate=${moment(data.startDate).format(
-                'YYYY-MM-DD',
-            )}&toDate=${moment(data.endDate).format('YYYY-MM-DD')}`,
-        );
-        return res.data;
+        const res = await userRequest
+            .get(
+                `export/export-excel?fromDate=${moment(data.startDate).format(
+                    'YYYY-MM-DD',
+                )}&toDate=${moment(data.endDate).format('YYYY-MM-DD')}`,
+                { method: 'GET', responseType: 'blob' },
+            )
+            .then((response) => {
+                const url = window.URL.createObjectURL(
+                    new Blob([response.data]),
+                );
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute(
+                    'download',
+                    `Dally-Report--${moment(Date.now()).format(
+                        'YYYYMMDDHHMMSS',
+                    )}.xlsx`,
+                ); //or any other extension
+                document.body.appendChild(link);
+                link.click();
+            });
     },
 );
