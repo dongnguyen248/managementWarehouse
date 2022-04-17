@@ -60,7 +60,37 @@ export const reportExcel = createAsyncThunk(
                     `Dally-Report--${moment(Date.now()).format(
                         'YYYYMMDDHHMMSS',
                     )}.xlsx`,
-                ); //or any other extension
+                );
+                document.body.appendChild(link);
+                link.click();
+            });
+    },
+);
+
+export const exportExcelHistoriesExport = createAsyncThunk(
+    'exportExcel',
+    async (data, { rejectWithValue }) => {
+        await userRequest
+            .get(
+                `export/export-histories-excel?fromDate=${moment(
+                    data.startDate,
+                ).format('YYYY-MM-DD')}&toDate=${moment(data.endDate).format(
+                    'YYYY-MM-DD',
+                )}`,
+                { method: 'GET', responseType: 'blob' },
+            )
+            .then((response) => {
+                const url = window.URL.createObjectURL(
+                    new Blob([response.data]),
+                );
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute(
+                    'download',
+                    `Histories-Export--${moment(Date.now()).format(
+                        'YYYYMMDDHHMMSS',
+                    )}.xlsx`,
+                );
                 document.body.appendChild(link);
                 link.click();
             });

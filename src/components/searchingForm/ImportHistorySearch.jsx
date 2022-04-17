@@ -5,6 +5,9 @@ import { searchImportHistory } from 'services/importHistoriesService';
 import moment from 'moment';
 function ImportHistorySearch() {
     var date = new Date();
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
     const dispath = useDispatch();
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
@@ -197,6 +200,7 @@ function ImportHistorySearch() {
                 <button
                     type='button'
                     className='btn btn-primary btn-sm button__export'
+                    disabled={user == null}
                     onClick={hanleExportExcel}>
                     Excel Export
                 </button>

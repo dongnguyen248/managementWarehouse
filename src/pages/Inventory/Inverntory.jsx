@@ -28,6 +28,9 @@ export default function Inverntory() {
     const [dataInventories, setDataInventories] = useState([]);
     const dispath = useDispatch();
     const { inventories } = useSelector((state) => state.inventories);
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
 
     useEffect(() => {
         dispath(getLineReciever());
@@ -50,7 +53,6 @@ export default function Inverntory() {
 
     const [handleMaterial, setHandleMaterial] = useState({
         newMaterial: false,
-        // addQuantity: false,
         exportMaterial: false,
         editMaterial: false,
     });
@@ -154,11 +156,6 @@ export default function Inverntory() {
     const itemSelected = dataInventories?.filter(
         (item) => item.toggleSelected === true,
     );
-    // const handleAddQuantity = () => {
-    //     !itemSelected.length
-    //         ? swal('Please select an  item!')
-    //         : setHandleMaterial({ addQuantity: true });
-    // };
     const hanldeExportMaterial = () => {
         !itemSelected.length
             ? swal('Please select an  item!')
@@ -173,26 +170,23 @@ export default function Inverntory() {
                 <div className='me-2 d-flex float-end'>
                     <button
                         type='button'
-                        className='btn btn-primary btn-sm button__export'>
+                        className='btn btn-primary btn-sm button__export'
+                        disabled={user == null}>
                         Export Excel
                     </button>
                     <button
                         type='button'
                         className='btn btn-primary btn-sm button__export'
+                        disabled={user == null}
                         onClick={() =>
                             setHandleMaterial({ newMaterial: true })
                         }>
                         New Material
                     </button>
-                    {/* <button
-                        type='button'
-                        className='btn btn-primary btn-sm button__export'
-                        onClick={handleAddQuantity}>
-                        Add Quantity
-                    </button> */}
                     <button
                         type='button'
                         className='btn btn-primary btn-sm button__export'
+                        disabled={user == null}
                         onClick={hanldeExportMaterial}>
                         Export Material
                     </button>
@@ -230,20 +224,6 @@ export default function Inverntory() {
                     <NewMaterial />
                 </Modal.Body>
             </Modal>
-            {/* <Modal
-                size='lg'
-                show={handleMaterial.addQuantity}
-                onHide={() => setHandleMaterial(handleMaterial.addQuantity)}
-                aria-labelledby='add-modal-sizes-title-lg'>
-                <Modal.Header closeButton>
-                    <Modal.Title id='add-modal-sizes-title-lg'>
-                        Add Quantity
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <AddQuantity data={itemSelected} />
-                </Modal.Body>
-            </Modal> */}
             <Modal
                 size='lg'
                 show={handleMaterial.exportMaterial}

@@ -67,7 +67,6 @@ export const getDepartment = createAsyncThunk(
 export const createMaterial = createAsyncThunk(
     'createMaterial',
     async (data, { rejectWithValue }) => {
-        console.log(data);
         const res = await userRequest.post('/material', data);
         res.status === 200
             ? swal({

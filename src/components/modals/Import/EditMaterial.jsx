@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateImportHistory } from 'services/importHistoriesService';
 
 function EditMaterial({ data }) {
-    console.log(data);
     const dispatch = useDispatch();
     const { line } = useSelector((state) => state.line);
     const lineId = line?.filter((item) => item.name === data.row.requester);

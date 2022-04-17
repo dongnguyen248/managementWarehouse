@@ -8,11 +8,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { useSelector } from 'react-redux';
 import './App.css';
 import { Routes, Route, useRoutes, Navigate } from 'react-router-dom';
-import UsersList from 'pages/paginateTest/UsersList';
+import UsersList from 'pages/UserList/UsersList';
+import ChangePassword from 'pages/UserList/ChangePassword';
 
 function App() {
-    const user = useSelector((state) => state.persistedReducer.user.currentUser);
-    // console.log(user)
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
     return (
         <div className='App'>
             <Routes>
@@ -20,6 +22,7 @@ function App() {
                 <Route path='/history-export' element={<ExportHistory />} />
                 <Route path='/history-import' element={<ImportHistory />} />
                 <Route path='/user-list' element={<UsersList />} />
+                <Route path='/change-password' element={<ChangePassword />} />
                 <Route
                     path='/login'
                     element={user ? <Navigate to='/' /> : <Login />}

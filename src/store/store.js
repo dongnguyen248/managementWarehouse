@@ -10,6 +10,7 @@ import costAccounts from './costAccountRedux';
 import departments from './departmentRedux';
 import materialRedux from './materialRedux';
 import exportHistoriesRedux from './exportHistoriesRedux';
+import employees from './employeeRedux';
 import {
     persistStore,
     persistReducer,
@@ -40,6 +41,7 @@ export const store = configureStore({
         departments: departments,
         materials: materialRedux,
         exportHistories: exportHistoriesRedux,
+        employees: employees,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
