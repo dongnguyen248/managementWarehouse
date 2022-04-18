@@ -73,18 +73,44 @@ export const deleteEmployee = createAsyncThunk(
 export const changePassword = createAsyncThunk(
     'changePassword',
     async (data, dispatch) => {
-        console.log(data.id);
-        const res = await userRequest.delete(
-            `token/delete-user?id=${data.id}&newPassword=${data.newPassword}`,
-        );
-        res.status === 200
-            ? swal({
-                  title: 'Change Password Employee',
-                  text: 'Change Password Success!',
-                  type: 'success',
-              }).then(function () {
-                  window.location.replace('http://localhost:3000/user-list');
-              })
-            : swal('Some thing went wrong!');
+        const res = await userRequest
+            .post(
+                `token/change-password?id=${data.userId}&newPassword=${data.newPassword}&oldPassword=${data.oldPassword}`,
+            )
+            .catch((error) => {
+                if (error.response) {
+                    swal(error.response.data);
+                } else if (error.request) {
+                    swal(error.request.data);
+                } else if (error.message) {
+                    swal(error.message.data);
+                }
+            });
+
+        // .then((res)=>{
+        //     console.log(res)
+        //     res.status === 200
+        //     ? swal({
+        //           title: 'Change Password Employee',
+        //           text: 'Change Password Success!',
+        //           type: 'success',
+        //       }).then(function () {
+        //           window.location.replace('http://localhost:3000/user-list');
+        //       })
+        //     : swal('Some thing went wrong!');
+        // })
+        // if(res != 200){
+        //     console.log(res.data)
+        // }
+        // console.log(res + "11")
+        // res.status === 200
+        //     ? swal({
+        //           title: 'Change Password Employee',
+        //           text: 'Change Password Success!',
+        //           type: 'success',
+        //       }).then(function () {
+        //           window.location.replace('http://localhost:3000/user-list');
+        //       })
+        //     : swal('Some thing went wrong!');
     },
 );

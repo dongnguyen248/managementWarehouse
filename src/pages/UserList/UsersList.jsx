@@ -1,20 +1,17 @@
 import Header from 'components/header/Header';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
-import axios from 'axios';
 import { userRequest } from 'utilities/requestMethod';
 import { Modal } from 'react-bootstrap';
 import EditUser from 'components/modals/user/EditUser';
 import NewUser from 'components/modals/user/NewUser';
 import { useDispatch } from 'react-redux';
 import { deleteEmployee } from 'services/userService';
+import swal from 'sweetalert';
 
 function UsersList() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [totalRows, setTotalRows] = useState(0);
-    const [perPage, setPerPage] = useState(10);
-    const [currentPage, setCurrentPage] = useState(1);
     const [handleEditUser, setHandlEditUser] = useState(false);
     const [addUser, setAddUser] = useState(false);
     const [userEdit, setUserEdit] = useState([]);
@@ -25,15 +22,27 @@ function UsersList() {
         return res.data;
     };
     const handleDelete = useCallback((row) => async () => {
-        dispatch(deleteEmployee(row.id));
+        swal({
+            title: 'Are you sure?',
+            text: 'Once deleted, you will not be able to recover this imaginary file!',
+            icon: 'warning',
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                dispatch(deleteEmployee(row.id));
+                swal('Poof! Your imaginary file has been deleted!', {
+                    icon: 'success',
+                });
+            } else {
+                swal('Your imaginary file is safe!');
+            }
+        });
     });
-    const handleEdit = useCallback(
-        (row) => async () => {
-            setUserEdit(row);
-            setHandlEditUser(true);
-        },
-        [currentPage, perPage, totalRows],
-    );
+    const handleEdit = useCallback((row) => async () => {
+        setUserEdit(row);
+        setHandlEditUser(true);
+    });
     useEffect(() => {
         getAllUser();
     }, []);

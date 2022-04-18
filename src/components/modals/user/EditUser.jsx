@@ -55,6 +55,7 @@ function EditUser({ data }) {
                 <input
                     type='password'
                     className='form-control'
+                    defaultValue={data.password}
                     onChange={(e) =>
                         setEmployee({ ...employee, password: e.target.value })
                     }

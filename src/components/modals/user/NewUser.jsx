@@ -1,17 +1,18 @@
-import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createEmployee } from 'services/userService';
-
+import { ErrorMessage } from '@hookform/error-message';
+import { useForm } from 'react-hook-form';
 function NewUser() {
     const dispatch = useDispatch();
-    const [user, setUser] = useState({
-        firstName: '',
-        lastName: '',
-        employeeId: '',
-        password: '',
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm({
+        criteriaMode: 'all',
     });
-    const handleAddEmployee = () => {
-        dispatch(createEmployee(user));
+    const handleAddEmployee = (data) => {
+        dispatch(createEmployee(data));
     };
     return (
         <div>
@@ -20,9 +21,24 @@ function NewUser() {
                 <input
                     type='text'
                     className='form-control'
-                    onChange={(e) =>
-                        setUser({ ...user, firstName: e.target.value })
-                    }
+                    {...register('firstName', {
+                        required: 'This input is required!',
+                    })}
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name='firstName'
+                    render={({ messages }) => {
+                        return messages
+                            ? Object.entries(messages).map(
+                                  ([type, message]) => (
+                                      <p key={type} className='errorMsg'>
+                                          {message}
+                                      </p>
+                                  ),
+                              )
+                            : null;
+                    }}
                 />
             </div>
             <div className='mb-3'>
@@ -30,9 +46,24 @@ function NewUser() {
                 <input
                     type='text'
                     className='form-control'
-                    onChange={(e) =>
-                        setUser({ ...user, lastName: e.target.value })
-                    }
+                    {...register('lastName', {
+                        required: 'This input is required!',
+                    })}
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name='lastName'
+                    render={({ messages }) => {
+                        return messages
+                            ? Object.entries(messages).map(
+                                  ([type, message]) => (
+                                      <p key={type} className='errorMsg'>
+                                          {message}
+                                      </p>
+                                  ),
+                              )
+                            : null;
+                    }}
                 />
             </div>
             <div className='mb-3'>
@@ -40,9 +71,24 @@ function NewUser() {
                 <input
                     type='text'
                     className='form-control'
-                    onChange={(e) =>
-                        setUser({ ...user, employeeId: e.target.value })
-                    }
+                    {...register('employeeId', {
+                        required: 'This input is required!',
+                    })}
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name='employeeId'
+                    render={({ messages }) => {
+                        return messages
+                            ? Object.entries(messages).map(
+                                  ([type, message]) => (
+                                      <p key={type} className='errorMsg'>
+                                          {message}
+                                      </p>
+                                  ),
+                              )
+                            : null;
+                    }}
                 />
             </div>
             <div className='mb-3'>
@@ -50,16 +96,35 @@ function NewUser() {
                 <input
                     type='password'
                     className='form-control'
-                    onChange={(e) =>
-                        setUser({ ...user, password: e.target.value })
-                    }
+                    {...register('password', {
+                        required: 'This input is required!',
+                        minLength: {
+                            value: 6,
+                            message: 'This input must exceed 6 characters',
+                        },
+                    })}
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name='password'
+                    render={({ messages }) => {
+                        return messages
+                            ? Object.entries(messages).map(
+                                  ([type, message]) => (
+                                      <p key={type} className='errorMsg'>
+                                          {message}
+                                      </p>
+                                  ),
+                              )
+                            : null;
+                    }}
                 />
             </div>
             <div className='col-md-12 text-center'>
                 <button
                     type='submit'
                     className='btn btn-primary'
-                    onClick={handleAddEmployee}>
+                    onClick={handleSubmit(handleAddEmployee)}>
                     Submit
                 </button>
             </div>
