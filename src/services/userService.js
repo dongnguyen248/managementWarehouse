@@ -86,31 +86,5 @@ export const changePassword = createAsyncThunk(
                     swal(error.message.data);
                 }
             });
-
-        // .then((res)=>{
-        //     console.log(res)
-        //     res.status === 200
-        //     ? swal({
-        //           title: 'Change Password Employee',
-        //           text: 'Change Password Success!',
-        //           type: 'success',
-        //       }).then(function () {
-        //           window.location.replace('http://localhost:3000/user-list');
-        //       })
-        //     : swal('Some thing went wrong!');
-        // })
-        // if(res != 200){
-        //     console.log(res.data)
-        // }
-        // console.log(res + "11")
-        // res.status === 200
-        //     ? swal({
-        //           title: 'Change Password Employee',
-        //           text: 'Change Password Success!',
-        //           type: 'success',
-        //       }).then(function () {
-        //           window.location.replace('http://localhost:3000/user-list');
-        //       })
-        //     : swal('Some thing went wrong!');
     },
 );

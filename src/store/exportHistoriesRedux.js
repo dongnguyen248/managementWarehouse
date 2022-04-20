@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getExportHistories } from 'services/exportHistoriesService';
+import {
+    getExportHistories,
+    getAllExportHistories,
+} from 'services/exportHistoriesService';
 
 const exportHistoriesSlice = createSlice({
     name: 'exportHistories',
@@ -12,6 +15,13 @@ const exportHistoriesSlice = createSlice({
             state.status = 'loading';
         },
         [getExportHistories.fulfilled]: (state, action) => {
+            state.status = 'success!';
+            state.exportHistories = action.payload;
+        },
+        [getAllExportHistories.pending]: (state, action) => {
+            state.status = 'loading';
+        },
+        [getAllExportHistories.fulfilled]: (state, action) => {
             state.status = 'success!';
             state.exportHistories = action.payload;
         },

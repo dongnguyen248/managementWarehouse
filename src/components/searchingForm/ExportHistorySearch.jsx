@@ -1,21 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     reportExcel,
     exportExcelHistoriesExport,
+    getAllExportHistories,
 } from 'services/exportHistoriesService';
+import { getLineReciever } from 'services/inventoriesService';
 
 function ImportHistorySearch() {
     var date = new Date();
     const user = useSelector(
         (state) => state.persistedReducer.user.currentUser,
     );
-    const dispatch = useDispatch();
+    const [lineSelect, setLineSelect] = useState();
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
     );
     const [endDate, setEndDate] = useState(new Date());
+    const dispatch = useDispatch();
+    const { exportHistories } = useSelector((state) => state.exportHistories);
+
     const [item, setItem] = useState({
         fromDate: startDate,
         toDate: endDate,
@@ -27,6 +32,9 @@ function ImportHistorySearch() {
     const hanleSearchItem = () => {
         console.log('first');
     };
+
+    const { line } = useSelector((state) => state.line);
+
     const hanleExportExcel = () => {
         dispatch(exportExcelHistoriesExport({ startDate, endDate }));
     };
@@ -49,7 +57,7 @@ function ImportHistorySearch() {
                         type='text'
                         id='formstart'
                         className='form-control'
-                        placeholder='Enter Qcode'
+                        placeholder='Enter start day'
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
@@ -65,47 +73,61 @@ function ImportHistorySearch() {
                         type='text'
                         id='formend'
                         className='form-control'
-                        placeholder='Enter Qcode'
+                        placeholder='Enter end day'
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formqcode'>
-                        Qcode:
+                        htmlFor='item'>
+                        Item:
                     </label>
                     <input
                         type='text'
-                        id='formqcode'
+                        id='item'
                         className='form-control'
-                        placeholder='Enter Qcode'
+                        placeholder='Enter Item'
+                        onChange={(e) =>
+                            setItem({ ...item, item: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
                     <label
                         className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formponumber'>
-                        PO:
+                        htmlFor='accountcost'>
+                        AccountCost:
                     </label>
                     <input
                         type='text'
-                        id='formponumber'
+                        id='accountcost'
                         className='form-control'
                         placeholder='Enter ponumber'
+                        onChange={(e) =>
+                            setItem({ ...item, item: e.target.value })
+                        }
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
-                    <label
-                        className='form-label d-flex flex-column justify-content-center'
-                        htmlFor='formspec'>
-                        Spec:
+                    <label>Receiver</label>
+
+                    <label>
+                        <select
+                            className='form-control'
+                            onChange={(e) =>
+                                setLineSelect({
+                                    LineRequest: e.target.value,
+                                })
+                            }>
+                            {line?.map((item) => {
+                                return (
+                                    <option key={item.id} value={item.id}>
+                                        {item.name}
+                                    </option>
+                                );
+                            })}
+                        </select>
                     </label>
-                    <input
-                        type='text'
-                        id='formspec'
-                        className='form-control'
-                        placeholder='Enter spec'
-                    />
                 </div>
 
                 <button

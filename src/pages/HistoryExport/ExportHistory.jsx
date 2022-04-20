@@ -1,13 +1,15 @@
 import DataTable from 'react-data-table-component';
 import Header from 'components/header/Header';
-import exports from './dataExport';
 import { useCallback, useEffect, useState } from 'react';
 import './ExportHistory.css';
 import ExportHistorySearch from 'components/searchingForm/ExportHistorySearch';
 import EditMaterial from 'components/modals/export/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getExportHistories } from 'services/exportHistoriesService';
+import {
+    getAllExportHistories,
+    getExportHistories,
+} from 'services/exportHistoriesService';
 
 export default function ExportHistory() {
     const dispatch = useDispatch();
@@ -16,14 +18,15 @@ export default function ExportHistory() {
     const [perPage, setPerPage] = useState(10);
     const [dataExportHistories, setDataExportHistories] = useState([]);
     const { exportHistories } = useSelector((state) => state.exportHistories);
-
+    useEffect(() => {
+        dispatch(getAllExportHistories());
+    }, []);
     useEffect(() => {
         dispatch(getExportHistories({ currentPage, perPage }));
         setDataExportHistories(exportHistories);
-    }, []);
-
+    }, [currentPage, perPage]);
     const [editMaterial, setEditMaterial] = useState(false);
-    const [historyep, setHistoryep] = useState(exports);
+    const [historyep, setHistoryep] = useState();
     const [materialSelect, setMaterialSelect] = useState([]);
     const columns = [
         {

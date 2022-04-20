@@ -96,3 +96,10 @@ export const exportExcelHistoriesExport = createAsyncThunk(
             });
     },
 );
+export const getAllExportHistories = createAsyncThunk(
+    'getAllExport',
+    async () => {
+        const res = await publicRequest.get('Export/export-histories');
+        return res.data;
+    },
+);
