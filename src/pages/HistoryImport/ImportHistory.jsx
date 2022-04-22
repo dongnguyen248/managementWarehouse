@@ -6,26 +6,34 @@ import EditMaterial from 'components/modals/Import/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { getImportHistories } from 'services/importHistoriesService';
-import { getCostAccounts, getLineReciever } from 'services/inventoriesService';
-
+import { getLineReciever } from 'services/inventoriesService';
+import moment from 'moment';
 export default function ImportHistory() {
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
     const [editMaterial, setEditMaterial] = useState(false);
     const [materialSelect, setMaterialSelect] = useState([]);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
-    const [dataImportHistories, setDataImportHistories] = useState([]);
-    const dispath = useDispatch();
+    const [pending, setPending] = useState(true);
+
+    const dispatch = useDispatch();
     const { importHistories } = useSelector((state) => state.importHistories);
     useEffect(() => {
-        dispath(getLineReciever());
+        dispatch(getLineReciever());
     }, []);
     useEffect(() => {
         document.title = 'Import History';
     }, []);
     useEffect(() => {
-        dispath(getImportHistories({ currentPage, perPage }));
+        dispatch(getImportHistories({ currentPage, perPage }));
         setTotalRows(importHistories.totalRows);
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 500);
+        return () => clearTimeout(timeout);
     }, [currentPage, perPage]);
     const handleDelete = useCallback(
         (row) => async () => {
@@ -41,12 +49,27 @@ export default function ImportHistory() {
         },
         [],
     );
+    const handlePageChange = (page) => {
+        getImportHistories(page);
+        setCurrentPage(page);
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        getImportHistories(page, newPerPage);
+        setPerPage(newPerPage);
+    };
 
     const columns = [
         {
             name: 'Qcode',
             selector: (row) => row.qCode,
             grow: 0.3,
+        },
+        {
+            name: 'Import Date',
+            selector: (row) => moment(row.lastImportDate).format('DD-MM-YYYY'),
+            grow: 1,
+            wrap: true,
         },
         {
             name: 'Item',
@@ -63,12 +86,6 @@ export default function ImportHistory() {
             name: 'Specification',
             selector: (row) => row.specification,
             grow: 2,
-            wrap: true,
-        },
-        {
-            name: 'Import Date',
-            selector: (row) => row.lastImportDate,
-            grow: 1,
             wrap: true,
         },
 
@@ -108,15 +125,17 @@ export default function ImportHistory() {
         },
         {
             cell: (row) => (
-                <div>
+                <div className='d-flex flex-column'>
                     <button
-                        className='btn me-2 btn-primary btn-sm'
+                        className='btn mt-2 btn-primary btn-sm'
+                        disabled={user == null}
                         onClick={handleEdit(row)}>
                         Edit
                     </button>
 
                     <button
-                        className='btn btn-danger  btn-sm'
+                        className='btn mt-2 mb-2 btn-danger  btn-sm'
+                        disabled={user == null}
                         onClick={handleDelete(row)}>
                         Delete
                     </button>
@@ -135,6 +154,11 @@ export default function ImportHistory() {
                 <DataTable
                     columns={columns}
                     data={importHistories.items}
+                    progressPending={pending}
+                    paginationTotalRows={totalRows}
+                    paginationDefaultPage={currentPage}
+                    onChangeRowsPerPage={handlePerRowsChange}
+                    onChangePage={handlePageChange}
                     pagination
                     highlightOnHover
                 />

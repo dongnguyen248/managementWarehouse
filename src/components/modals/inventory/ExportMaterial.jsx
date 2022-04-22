@@ -44,6 +44,7 @@ function ExportMaterial({ data }) {
                 Remart: material.Note,
                 Receiver: material.line,
                 Handler: userId,
+                Price: data[0].price,
             }),
         );
     };

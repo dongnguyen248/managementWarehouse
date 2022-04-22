@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
-
+import moment from 'moment';
 function EditMaterial({ data }) {
-    const [material, setMaterial] = useState({
-        inputDate: new Date(),
-    });
+    console.log(data);
+    const [material, setMaterial] = useState({});
     const handleSubmit = () => {
         console.log('first');
     };
@@ -18,7 +17,7 @@ function EditMaterial({ data }) {
                         </td>
                         <td>
                             <input
-                                defaultValue={data.qcode}
+                                defaultValue={data.qCode}
                                 type='text'
                                 className='form-control'
                             />
@@ -26,13 +25,13 @@ function EditMaterial({ data }) {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Input Date</label>
+                            <label>Export Date</label>
                         </td>
                         <td>
                             <DatePicker
                                 className='form-control'
-                                selected={material.inputDate}
-                                defaultValue={(material.inputDate = new Date())}
+                                dateFormat='yyyy-MM-dd'
+                                selected={moment(data.exportDate).toDate()}
                             />
                         </td>
                     </tr>
@@ -108,7 +107,7 @@ function EditMaterial({ data }) {
                             />
                         </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                         <td className='tdleft'>
                             <label>Received</label>
                         </td>
@@ -119,7 +118,7 @@ function EditMaterial({ data }) {
                                 className='form-control'
                             />
                         </td>
-                    </tr>
+                    </tr> */}
                 </tbody>
             </table>
             <div className='col-md-12 text-center'>

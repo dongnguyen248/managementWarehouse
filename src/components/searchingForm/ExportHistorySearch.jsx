@@ -1,26 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     reportExcel,
     exportExcelHistoriesExport,
-    getAllExportHistories,
 } from 'services/exportHistoriesService';
-import { getLineReciever } from 'services/inventoriesService';
 
 function ImportHistorySearch() {
     var date = new Date();
     const user = useSelector(
         (state) => state.persistedReducer.user.currentUser,
     );
-    const [lineSelect, setLineSelect] = useState();
+
     const [startDate, setStartDate] = useState(
         new Date(date.getFullYear(), date.getMonth(), 1),
     );
     const [endDate, setEndDate] = useState(new Date());
     const dispatch = useDispatch();
-    const { exportHistories } = useSelector((state) => state.exportHistories);
-
     const [item, setItem] = useState({
         fromDate: startDate,
         toDate: endDate,
@@ -32,8 +28,6 @@ function ImportHistorySearch() {
     const hanleSearchItem = () => {
         console.log('first');
     };
-
-    const { line } = useSelector((state) => state.line);
 
     const hanleExportExcel = () => {
         dispatch(exportExcelHistoriesExport({ startDate, endDate }));
@@ -109,27 +103,21 @@ function ImportHistorySearch() {
                     />
                 </div>
                 <div className='form-outline  ms-2 me-1 d-flex '>
-                    <label>Receiver</label>
-
-                    <label>
-                        <select
-                            className='form-control'
-                            onChange={(e) =>
-                                setLineSelect({
-                                    LineRequest: e.target.value,
-                                })
-                            }>
-                            {line?.map((item) => {
-                                return (
-                                    <option key={item.id} value={item.id}>
-                                        {item.name}
-                                    </option>
-                                );
-                            })}
-                        </select>
+                    <label
+                        className='form-label d-flex flex-column justify-content-center'
+                        htmlFor='accountcost'>
+                        Line:
                     </label>
+                    <input
+                        type='text'
+                        id='accountcost'
+                        className='form-control'
+                        placeholder='Enter Line'
+                        onChange={(e) =>
+                            setItem({ ...item, Line: e.target.value })
+                        }
+                    />
                 </div>
-
                 <button
                     type='button'
                     className='btn btn-primary btn-sm button__export'

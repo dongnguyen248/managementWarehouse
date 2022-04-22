@@ -7,31 +7,47 @@ import EditMaterial from 'components/modals/export/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    getAllExportHistories,
     getExportHistories,
+    deleteExportHistory,
 } from 'services/exportHistoriesService';
+
+import moment from 'moment';
+import swal from 'sweetalert';
 
 export default function ExportHistory() {
     const dispatch = useDispatch();
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
+    const [pending, setPending] = useState(true);
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
-    const [dataExportHistories, setDataExportHistories] = useState([]);
     const { exportHistories } = useSelector((state) => state.exportHistories);
-    useEffect(() => {
-        dispatch(getAllExportHistories());
-    }, []);
+    console.log(exportHistories);
+
     useEffect(() => {
         dispatch(getExportHistories({ currentPage, perPage }));
-        setDataExportHistories(exportHistories);
+        setTotalRows(exportHistories.totalRows);
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 500);
+        return () => clearTimeout(timeout);
     }, [currentPage, perPage]);
     const [editMaterial, setEditMaterial] = useState(false);
-    const [historyep, setHistoryep] = useState();
     const [materialSelect, setMaterialSelect] = useState([]);
+
     const columns = [
         {
             name: 'Zone',
             selector: (row) => row.zone,
+            wrap: true,
+        },
+        ,
+        {
+            name: 'Export Date',
+            selector: (row) => moment(row.exportDate).format('DD-MM-YYYY'),
+            grow: 1,
             wrap: true,
         },
         {
@@ -40,6 +56,7 @@ export default function ExportHistory() {
             grow: 0.5,
             wrap: true,
         },
+
         {
             name: 'Item',
             selector: (row) => row.item,
@@ -91,15 +108,17 @@ export default function ExportHistory() {
         },
         {
             cell: (row) => (
-                <div>
+                <div className='d-flex flex-column'>
                     <button
-                        className='btn me-2  btn-primary btn-sm'
+                        className='btn mb-2 mt-2 btn-primary btn-sm'
+                        disabled={user == null}
                         onClick={handleEdit(row)}>
                         Edit
                     </button>
 
                     <button
-                        className='btn btn-danger btn-sm'
+                        className='btn mb-2 btn-danger btn-sm'
+                        disabled={user == null}
                         onClick={handleDelete(row)}>
                         Delete
                     </button>
@@ -119,7 +138,22 @@ export default function ExportHistory() {
     };
     const handleDelete = useCallback(
         (row) => async () => {
-            console.log(row);
+            swal({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover this imaginary file!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    dispatch(deleteExportHistory(row.id));
+                    swal('Poof! Your imaginary file has been deleted!', {
+                        icon: 'success',
+                    });
+                } else {
+                    swal('Your imaginary file is safe!');
+                }
+            });
         },
         [],
     );
@@ -132,7 +166,7 @@ export default function ExportHistory() {
     );
 
     const handleRowClicked = (row) => {
-        const updatedData = historyep.map((item) => {
+        const updatedData = exportHistories?.map((item) => {
             if (row.id !== item.id) {
                 delete item.toggleSelected;
                 return item;
@@ -142,7 +176,7 @@ export default function ExportHistory() {
                 toggleSelected: !item.toggleSelected,
             };
         });
-        setHistoryep(updatedData);
+        // setDataExportHistories(updatedData);
     };
 
     const conditionalRowStyles = [
@@ -161,11 +195,13 @@ export default function ExportHistory() {
             <div className='swrap'>
                 <h1 className='header__list'>Export History List</h1>
                 <ExportHistorySearch />
-
                 <DataTable
                     columns={columns}
+                    progressPending={pending}
                     data={exportHistories}
+                    paginationTotalRows={totalRows}
                     onRowClicked={handleRowClicked}
+                    paginationDefaultPage={currentPage}
                     conditionalRowStyles={conditionalRowStyles}
                     highlightOnHover
                     pagination

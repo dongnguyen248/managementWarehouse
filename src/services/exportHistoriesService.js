@@ -103,3 +103,21 @@ export const getAllExportHistories = createAsyncThunk(
         return res.data;
     },
 );
+export const deleteExportHistory = createAsyncThunk(
+    'deleteHistory',
+
+    async (id) => {
+        const res = await userRequest.delete(`/Export?id=${id}`);
+        res.status === 200
+            ? swal({
+                  title: 'Delete History',
+                  text: 'Delete Success!',
+                  type: 'success',
+              }).then(function () {
+                  window.location.replace(
+                      'http://localhost:3000/history-export',
+                  );
+              })
+            : swal('Some thing went wrong!');
+    },
+);

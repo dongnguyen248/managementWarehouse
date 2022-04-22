@@ -21,11 +21,12 @@ import {
 } from 'services/inventoriesService';
 
 export default function Inverntory() {
-    const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [dataInventories, setDataInventories] = useState([]);
+    const [pending, setPending] = useState(true);
+
     const dispath = useDispatch();
     const { inventories } = useSelector((state) => state.inventories);
     const user = useSelector(
@@ -42,6 +43,10 @@ export default function Inverntory() {
     useEffect(() => {
         dispath(getInventories({ currentPage, perPage }));
         setTotalRows(inventories.totalRows);
+        const timeout = setTimeout(() => {
+            setPending(false);
+        }, 500);
+        return () => clearTimeout(timeout);
     }, [currentPage, perPage]);
     useEffect(() => {
         setDataInventories(inventories.items);
@@ -67,7 +72,7 @@ export default function Inverntory() {
     const columns = useMemo(
         () => [
             {
-                name: 'Area',
+                name: 'Zone',
                 selector: (row) => row.zone,
                 grow: 0.5,
                 wrap: true,
@@ -110,6 +115,7 @@ export default function Inverntory() {
                 cell: (row) => (
                     <button
                         className='btn btn-primary btn-sm'
+                        disabled={user == null}
                         onClick={handleEdit(row)}>
                         Edit
                     </button>
@@ -200,7 +206,7 @@ export default function Inverntory() {
                     expandableRows
                     expandableRowExpanded={rowPreExpanded}
                     expandableRowsComponent={ViewTable}
-                    progressPending={loading}
+                    progressPending={pending}
                     paginationServer
                     paginationTotalRows={totalRows}
                     paginationDefaultPage={currentPage}

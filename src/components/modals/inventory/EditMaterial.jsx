@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
+import { useSelector } from 'react-redux';
 
 const EditMaterial = ({ data }) => {
-    console.log(data);
+    const { zone } = useSelector((state) => state.zone);
+
     const [material, setMaterial] = useState({
         startDate: new Date(),
         checkedDate: new Date(),
@@ -44,7 +46,7 @@ const EditMaterial = ({ data }) => {
                             />
                         </td>
                         <td className='tdleft'>
-                            <label>Area</label>
+                            <label>Zone</label>
                         </td>
                         <td>
                             <select className='form-control'>
