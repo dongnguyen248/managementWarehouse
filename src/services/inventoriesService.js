@@ -80,3 +80,19 @@ export const createMaterial = createAsyncThunk(
         return res.data;
     },
 );
+export const updateMaterial = createAsyncThunk(
+    'updateMaterial',
+    async (data, { rejectWithValue }) => {
+        const res = await userRequest.put('/material', data);
+        res.status === 200
+            ? swal({
+                  title: 'Update Material',
+                  text: 'Update Success!',
+                  type: 'success',
+              }).then(function () {
+                  window.location.replace('http://localhost:3000');
+              })
+            : swal('Some thing went wrong!');
+        return res.data;
+    },
+);

@@ -1,11 +1,21 @@
 import { useState } from 'react';
 import './InventoryModals.css';
 import DatePicker from 'react-datepicker';
-import { useSelector } from 'react-redux';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateMaterial } from 'services/inventoriesService';
+import moment from 'moment';
 const EditMaterial = ({ data }) => {
-    const { zone } = useSelector((state) => state.zone);
+    console.log(data);
+    const { area } = useSelector((state) => state.area);
+    const { unit } = useSelector((state) => state.unit);
 
+    const dispatch = useDispatch();
+    const areaSelect = area.filter((item) => item.description === data.zone);
+    const unitSelect = unit.filter((item) => item.name === data.unit);
+
+    const userId = useSelector(
+        (state) => state.persistedReducer.user.currentUser.employee.id,
+    );
     const [material, setMaterial] = useState({
         startDate: new Date(),
         checkedDate: new Date(),
@@ -27,7 +37,25 @@ const EditMaterial = ({ data }) => {
         received: false,
     });
     const handleSaveMaterial = () => {
-        console.log(material);
+        dispatch(
+            updateMaterial({
+                ImportDate: material.inputDate,
+                price: material.price,
+                quantity: material.quantity,
+                supplier: material.supplier,
+                lineRequest: material.LineRequest,
+                buyer: material.buyer,
+                po: material.Po,
+                handler: userId,
+                material: data.id,
+                allocated: material.allocated,
+                InspectionNavigation: {
+                    status: material.checkResult,
+                    inspector: material.checker,
+                    result: material.checked,
+                },
+            }),
+        );
     };
     return (
         <>
@@ -49,10 +77,22 @@ const EditMaterial = ({ data }) => {
                             <label>Zone</label>
                         </td>
                         <td>
-                            <select className='form-control'>
-                                <option className='form-control'>
-                                    MAIN WAREHOUSE
-                                </option>
+                            <select
+                                defaultValue={areaSelect[0].id}
+                                className='form-control'
+                                onChange={(e) =>
+                                    setMaterial({
+                                        ...material,
+                                        area: e.target.value,
+                                    })
+                                }>
+                                {area?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
                             </select>
                         </td>
                     </tr>
@@ -96,7 +136,7 @@ const EditMaterial = ({ data }) => {
                         </td>
                         <td>
                             <textarea
-                                defaultValue={data.spec}
+                                defaultValue={data.specification}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
@@ -109,18 +149,23 @@ const EditMaterial = ({ data }) => {
                             <label>Unit</label>
                         </td>
                         <td>
-                            <input
-                                defaultValue={data.unit}
+                            <select
+                                defaultValue={unitSelect[0].id}
+                                className='form-control'
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
                                         unit: e.target.value,
                                     })
-                                }
-                                type='text'
-                                className='form-control'
-                                required='required'
-                            />
+                                }>
+                                {unit?.map((item) => {
+                                    return (
+                                        <option key={item.id} value={item.id}>
+                                            {item.name}
+                                        </option>
+                                    );
+                                })}
+                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -151,11 +196,13 @@ const EditMaterial = ({ data }) => {
                     </tr>
                     <tr>
                         <td className='tdleft'>
-                            <label>Input Date</label>
+                            <label>Import Date</label>
                         </td>
                         <td>
                             <input
-                                defaultValue={data.lastImportDate}
+                                defaultValue={moment(
+                                    data.lastImportDate,
+                                ).format('DD-MM-YYYY')}
                                 disabled
                                 className='form-control'
                             />

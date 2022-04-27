@@ -45,6 +45,7 @@ function ExportMaterial({ data }) {
                 Receiver: material.line,
                 Handler: userId,
                 Price: data[0].price,
+                InventoriesBefor: data[0].inventory - exportValue,
             }),
         );
     };
@@ -84,7 +85,6 @@ function ExportMaterial({ data }) {
                         </td>
                         <td>
                             <DatePicker
-                                defaultValue={data[0].inputdate}
                                 type='text'
                                 className='form-control'
                                 selected={material.outputDate}

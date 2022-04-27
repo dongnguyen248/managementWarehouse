@@ -28,7 +28,6 @@ const inventoriesSlice = createSlice({
         },
         [searchInventories.fulfilled]: (state, action) => {
             state.status = 'success';
-            console.log(action.payload.items);
             state.inventories = action.payload;
         },
         [searchInventories.rejected]: (state, action) => {

@@ -121,3 +121,36 @@ export const deleteExportHistory = createAsyncThunk(
             : swal('Some thing went wrong!');
     },
 );
+export const updateExportHistory = createAsyncThunk(
+    'updateExportHistories',
+    async (data, dispatch, getState) => {
+        const res = await userRequest
+            .put(`/Export`, data)
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        title: 'Update Import',
+                        text: 'update Success!',
+                        type: 'success',
+                    }).then(function () {
+                        window.location.replace(
+                            'http://localhost:3000/history-export',
+                        );
+                    });
+                } else {
+                    swal('Update false please check and try again!');
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    swal(error.response.data);
+                } else if (error.request) {
+                    swal(error.request.data);
+                } else if (error.message) {
+                    swal(error.message.data);
+                }
+            });
+
+        return res.data;
+    },
+);

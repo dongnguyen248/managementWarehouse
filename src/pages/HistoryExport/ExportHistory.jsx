@@ -6,16 +6,30 @@ import ExportHistorySearch from 'components/searchingForm/ExportHistorySearch';
 import EditMaterial from 'components/modals/export/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import swal from 'sweetalert';
 import {
     getExportHistories,
     deleteExportHistory,
 } from 'services/exportHistoriesService';
 
-import moment from 'moment';
-import swal from 'sweetalert';
+import {
+    getArea,
+    getCostAccounts,
+    getDepartment,
+    getLineReciever,
+    getUnit,
+} from 'services/inventoriesService';
 
 export default function ExportHistory() {
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getLineReciever());
+        dispatch(getUnit());
+        dispatch(getArea());
+        dispatch(getCostAccounts());
+        dispatch(getDepartment());
+    }, []);
     const user = useSelector(
         (state) => state.persistedReducer.user.currentUser,
     );
@@ -23,8 +37,9 @@ export default function ExportHistory() {
     const [totalRows, setTotalRows] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [perPage, setPerPage] = useState(10);
+    const [editMaterial, setEditMaterial] = useState(false);
+    const [materialSelect, setMaterialSelect] = useState([]);
     const { exportHistories } = useSelector((state) => state.exportHistories);
-    console.log(exportHistories);
 
     useEffect(() => {
         dispatch(getExportHistories({ currentPage, perPage }));
@@ -34,8 +49,43 @@ export default function ExportHistory() {
         }, 500);
         return () => clearTimeout(timeout);
     }, [currentPage, perPage]);
-    const [editMaterial, setEditMaterial] = useState(false);
-    const [materialSelect, setMaterialSelect] = useState([]);
+    const handlePageChange = (page) => {
+        getExportHistories(page);
+        setCurrentPage(page);
+    };
+
+    const handlePerRowsChange = async (newPerPage, page) => {
+        getExportHistories(page, newPerPage);
+        setPerPage(newPerPage);
+    };
+    const handleDelete = useCallback(
+        (row) => async () => {
+            swal({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover this imaginary file!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    dispatch(deleteExportHistory(row.id));
+                    swal('Poof! Your imaginary file has been deleted!', {
+                        icon: 'success',
+                    });
+                } else {
+                    swal('Your imaginary file is safe!');
+                }
+            });
+        },
+        [],
+    );
+    const handleEdit = useCallback(
+        (row) => async () => {
+            setEditMaterial(true);
+            setMaterialSelect(row);
+        },
+        [],
+    );
 
     const columns = [
         {
@@ -43,7 +93,6 @@ export default function ExportHistory() {
             selector: (row) => row.zone,
             wrap: true,
         },
-        ,
         {
             name: 'Export Date',
             selector: (row) => moment(row.exportDate).format('DD-MM-YYYY'),
@@ -127,57 +176,20 @@ export default function ExportHistory() {
             grow: 1,
         },
     ];
-    const handlePageChange = (page) => {
-        getExportHistories(page);
-        setCurrentPage(page);
-    };
 
-    const handlePerRowsChange = async (newPerPage, page) => {
-        getExportHistories(page, newPerPage);
-        setPerPage(newPerPage);
-    };
-    const handleDelete = useCallback(
-        (row) => async () => {
-            swal({
-                title: 'Are you sure?',
-                text: 'Once deleted, you will not be able to recover this imaginary file!',
-                icon: 'warning',
-                buttons: true,
-                dangerMode: true,
-            }).then((willDelete) => {
-                if (willDelete) {
-                    dispatch(deleteExportHistory(row.id));
-                    swal('Poof! Your imaginary file has been deleted!', {
-                        icon: 'success',
-                    });
-                } else {
-                    swal('Your imaginary file is safe!');
-                }
-            });
-        },
-        [],
-    );
-    const handleEdit = useCallback(
-        (row) => async () => {
-            setEditMaterial(true);
-            setMaterialSelect(row);
-        },
-        [],
-    );
-
-    const handleRowClicked = (row) => {
-        const updatedData = exportHistories?.map((item) => {
-            if (row.id !== item.id) {
-                delete item.toggleSelected;
-                return item;
-            }
-            return {
-                ...item,
-                toggleSelected: !item.toggleSelected,
-            };
-        });
-        // setDataExportHistories(updatedData);
-    };
+    // const handleRowClicked = (row) => {
+    //     const updatedData = exportHistories?.map((item) => {
+    //         if (row.id !== item.id) {
+    //             delete item.toggleSelected;
+    //             return item;
+    //         }
+    //         return {
+    //             ...item,
+    //             toggleSelected: !item.toggleSelected,
+    //         };
+    //     });
+    //     // setDataExportHistories(updatedData);
+    // };
 
     const conditionalRowStyles = [
         {
@@ -198,15 +210,17 @@ export default function ExportHistory() {
                 <DataTable
                     columns={columns}
                     progressPending={pending}
-                    data={exportHistories}
+                    data={exportHistories.items}
                     paginationTotalRows={totalRows}
-                    onRowClicked={handleRowClicked}
                     paginationDefaultPage={currentPage}
                     conditionalRowStyles={conditionalRowStyles}
                     highlightOnHover
                     pagination
                 />
             </div>
+            <p className='text-center'>
+                Total Export : {exportHistories.total}
+            </p>
             <Modal
                 size='lg'
                 show={editMaterial}

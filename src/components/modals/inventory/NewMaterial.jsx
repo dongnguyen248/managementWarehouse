@@ -20,6 +20,7 @@ const ImportMaterial = () => {
     const { line } = useSelector((state) => state.line);
     const { area } = useSelector((state) => state.area);
     const { materials } = useSelector((state) => state.materials);
+
     const [material, setMaterial] = useState({
         inputDate: new Date(),
         checkedDate: new Date(),
@@ -39,11 +40,18 @@ const ImportMaterial = () => {
         buyer: '',
         checker: '',
     });
-    const materialExist = materials?.filter((m) => m.qcode === material.qCode);
+    const materialExist = [];
     useEffect(() => {
+        for (let index = 0; index < materials.length; index++) {
+            let QcodeTrim = materials[index].qcode.trim();
+            if (materials[index].qcode.trim() === material.qCode.trim()) {
+                materialExist.push(materials[index]);
+            }
+        }
         if (materialExist.length !== 0) {
             material.Specification = materialExist[0].specification;
             material.item = materialExist[0].item;
+            console.log('first');
             setLocation(materialExist[0].location);
             setDisableInput(true);
         } else {
@@ -477,10 +485,11 @@ const ImportMaterial = () => {
                             <input
                                 type='checkbox'
                                 className='form-check-input'
+                                defaultValue={material.allocated}
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        received: e.target.checked,
+                                        allocated: e.target.checked,
                                     })
                                 }
                             />

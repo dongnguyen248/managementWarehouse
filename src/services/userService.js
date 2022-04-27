@@ -57,7 +57,6 @@ export const updateEmployee = createAsyncThunk(
 export const deleteEmployee = createAsyncThunk(
     'deleteEmployee',
     async (id, dispatch) => {
-        console.log(id);
         const res = await userRequest.delete(`token/delete-user?id=${id}`);
         res.status === 200
             ? swal({

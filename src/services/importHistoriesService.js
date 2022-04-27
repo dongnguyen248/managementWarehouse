@@ -24,21 +24,33 @@ export const searchImportHistory = createAsyncThunk(
 export const updateImportHistory = createAsyncThunk(
     'updateImportHistory',
     async (data, dispatch, getState) => {
-        const res = await userRequest.post(
-            `ImportHistory/update-history-material`,
-            data.importHistory,
-        );
-        if (res.status === 200) {
-            swal({
-                title: 'Update Import',
-                text: 'update Success!',
-                type: 'success',
-            }).then(function () {
-                window.location.replace('http://localhost:3000/history-import');
+        const res = await userRequest
+            .post(`ImportHistory/update-history-material`, data.importHistory)
+            .then((response) => {
+                if (response.status === 200) {
+                    swal({
+                        title: 'Update Import',
+                        text: 'update Success!',
+                        type: 'success',
+                    }).then(function () {
+                        window.location.replace(
+                            'http://localhost:3000/history-import',
+                        );
+                    });
+                } else {
+                    swal('Update false please check and try again!');
+                }
+            })
+            .catch((error) => {
+                if (error.response) {
+                    swal(error.response.data);
+                } else if (error.request) {
+                    swal(error.request.data);
+                } else if (error.message) {
+                    swal(error.message.data);
+                }
             });
-        } else {
-            swal('Update false please check and try again!');
-        }
+
         return res.data;
     },
 );
@@ -62,5 +74,23 @@ export const createImportHistory = createAsyncThunk(
             swal('Create false please check and try again!');
         }
         return res.data;
+    },
+);
+export const deleteImportHistory = createAsyncThunk(
+    'deleteImportHistory',
+
+    async (id) => {
+        const res = await userRequest.delete(`/ImportHistory?id=${id}`);
+        res.status === 200
+            ? swal({
+                  title: 'Delete History',
+                  text: 'Delete Success!',
+                  type: 'success',
+              }).then(function () {
+                  window.location.replace(
+                      'http://localhost:3000/history-import',
+                  );
+              })
+            : swal('Some thing went wrong!');
     },
 );

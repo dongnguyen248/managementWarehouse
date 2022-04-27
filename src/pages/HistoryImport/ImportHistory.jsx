@@ -5,9 +5,13 @@ import ImportHistorySearch from 'components/searchingForm/ImportHistorySearch';
 import EditMaterial from 'components/modals/Import/EditMaterial';
 import { Modal } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { getImportHistories } from 'services/importHistoriesService';
+import {
+    deleteImportHistory,
+    getImportHistories,
+} from 'services/importHistoriesService';
 import { getLineReciever } from 'services/inventoriesService';
 import moment from 'moment';
+import swal from 'sweetalert';
 export default function ImportHistory() {
     const user = useSelector(
         (state) => state.persistedReducer.user.currentUser,
@@ -18,7 +22,6 @@ export default function ImportHistory() {
     const [perPage, setPerPage] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
     const [pending, setPending] = useState(true);
-
     const dispatch = useDispatch();
     const { importHistories } = useSelector((state) => state.importHistories);
     useEffect(() => {
@@ -37,15 +40,30 @@ export default function ImportHistory() {
     }, [currentPage, perPage]);
     const handleDelete = useCallback(
         (row) => async () => {
-            console.log(row);
+            swal({
+                title: 'Are you sure?',
+                text: 'Once deleted, you will not be able to recover this imaginary file!',
+                icon: 'warning',
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    dispatch(deleteImportHistory(row.id));
+                    swal('Poof! Your imaginary file has been deleted!', {
+                        icon: 'success',
+                    });
+                } else {
+                    swal('Your imaginary file is safe!');
+                }
+            });
         },
         [],
     );
+
     const handleEdit = useCallback(
         (row) => async () => {
             setEditMaterial(true);
             setMaterialSelect({ row });
-            console.log(editMaterial);
         },
         [],
     );
@@ -93,6 +111,11 @@ export default function ImportHistory() {
             name: 'Price',
             selector: (row) => row.price,
             grow: 0.3,
+        },
+        {
+            name: 'Quantity',
+            selector: (row) => row.quantity,
+            wrap: true,
         },
         {
             name: 'PO Number',
@@ -162,8 +185,11 @@ export default function ImportHistory() {
                     pagination
                     highlightOnHover
                 />
-                ;
             </div>
+            <p className='text-center'>
+                Total Import : {importHistories.total}
+            </p>
+
             <Modal
                 size='lg'
                 show={editMaterial}

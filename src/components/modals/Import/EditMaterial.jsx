@@ -2,27 +2,31 @@ import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateImportHistory } from 'services/importHistoriesService';
-
+import moment from 'moment';
 function EditMaterial({ data }) {
     const dispatch = useDispatch();
     const { line } = useSelector((state) => state.line);
     const lineId = line?.filter((item) => item.name === data.row.requester);
+    const user = useSelector(
+        (state) => state.persistedReducer.user.currentUser,
+    );
 
     const [material, setMaterial] = useState({
         remark: data.row.remark,
         line: lineId[0].id,
+        Quantity: data.row.quantity,
         price: data.row.price,
         buyer: data.row.buyer,
         poNumber: data.row.po,
         supplier: data.row.supplier,
         received: data.row.received,
+        lastImportDate: data.row.lastImportDate,
     });
 
     const handleSubmit = () => {
         dispatch(
             updateImportHistory({
                 qCode: data.row.qCode,
-                remark: material.remark,
                 importHistory: {
                     id: data.row.id,
                     LineRequest: material.line,
@@ -31,6 +35,10 @@ function EditMaterial({ data }) {
                     supplier: material.supplier,
                     Allocated: material.received,
                     price: material.price,
+                    remark: material.remark,
+                    ImportDate: material.lastImportDate,
+                    Quantity: material.Quantity,
+                    Handler: user.employee.id,
                 },
             }),
         );
@@ -57,11 +65,16 @@ function EditMaterial({ data }) {
                             <label>Input Date</label>
                         </td>
                         <td>
-                            <input
+                            <DatePicker
+                                dateFormat='yyyy-MM-dd'
+                                selected={moment(data.row.exportDate).toDate()}
+                                onChange={(date: Date) =>
+                                    setMaterial({
+                                        ...material,
+                                        lastImportDate: date,
+                                    })
+                                }
                                 className='form-control'
-                                type='text'
-                                disabled
-                                defaultValue={data.row.lastImportDate}
                             />
                         </td>
                     </tr>
@@ -78,7 +91,25 @@ function EditMaterial({ data }) {
                                 onChange={(e) =>
                                     setMaterial({
                                         ...material,
-                                        price: e.target.value,
+                                        price: e.target.value.trim(),
+                                    })
+                                }
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td className='tdleft'>
+                            <label>Quantity</label>
+                        </td>
+                        <td>
+                            <input
+                                defaultValue={data.row.quantity}
+                                type='text'
+                                className='form-control'
+                                onChange={(e) =>
+                                    setMaterial({
+                                        ...material,
+                                        Quantity: e.target.value,
                                     })
                                 }
                             />
@@ -151,7 +182,7 @@ function EditMaterial({ data }) {
                                         line: e.target.value,
                                     });
                                 }}
-                                defaultValue={data.row.requester}>
+                                defaultValue={lineId[0].id}>
                                 {line?.map((item) => {
                                     return (
                                         <option
